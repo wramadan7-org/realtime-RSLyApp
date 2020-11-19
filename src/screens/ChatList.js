@@ -1,8 +1,9 @@
 import React from 'react';
 import {
    View, Text, StyleSheet,
-   FlatList, Image,
+   FlatList, Image, TouchableOpacity,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import Logo from '../assets/images/logos/logo.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -83,8 +84,11 @@ const DATA = [
    },
 ];
 
-const Item = ({image, name, message, status, time}) => (
-   <View style={styles.item}>
+const Item = ({image, name, message, status, time}) => {
+   const navigation = useNavigation();
+   return (
+      <>
+   <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('ChatDetail')}>
 
       <View style={styles.viewImage}>
          <Image source={image} style={styles.profile} />
@@ -110,8 +114,10 @@ const Item = ({image, name, message, status, time}) => (
             <Text>{time}</Text>
          </View>
       </View>
-   </View>
-);
+   </TouchableOpacity>
+   </>
+   );
+   };
 
 const ChatList = () => {
 
