@@ -28,11 +28,11 @@ function Welcome({navigation}) {
 
           <View style={styles.viewAgreemen}>
             <Text style={styles.txtAgreemen}>
-              Baca_
+              Baca{' '}
               <Text style={styles.txtLink}>
-                Kebijakan Privasi_
+                Kebijakan Privasi{' '}
               </Text>
-              kami. Ketuk "Setuju dan lanjutkan" untuk menerima_
+              kami. Ketuk "Setuju dan lanjutkan" untuk menerima{' '}
               <Text style={styles.txtLink}>
                 Ketentuan Layanan.
               </Text>

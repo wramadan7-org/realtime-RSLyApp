@@ -138,7 +138,7 @@ const ChatList = () => {
          <FlatList
             data={DATA}
             renderItem={renderItem}
-            keyExtractor={item => item.id}
+            keyExtractor={(item, index) => index.toString()}
          />
       </View>
       </>

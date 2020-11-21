@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
 import {
-   Text, View, TouchableOpacity, StyleSheet,
+   Text, View, TouchableOpacity,
+   StyleSheet,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import SettingList from '../screens/SettingList';
 
 class Header extends Component {
+
+   constructor(props) {
+      super(props);
+      this.state = {
+         setting: false,
+      };
+   }
+
    render() {
       return (
          <View style={styles.parent}>
@@ -52,6 +63,11 @@ class Header extends Component {
                </View>
             </View>
 
+            {this.state.setting === true && (
+               // <View style={{alignSelf: 'flex-end'}}>
+                     <SettingList />
+               // </View>
+            )}
          </View>
       );
    }

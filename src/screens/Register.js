@@ -23,7 +23,7 @@ class Register extends Component {
 
                <View style={styles.viewTxtDesc}>
                   <Text style={styles.txtDesc}>
-                     RamSLyApp akan mengirim SMS untuk memverifikasi nomor telepon Anda._
+                     RamSLyApp akan mengirim SMS untuk memverifikasi nomor telepon Anda.{' '}
                      <Text style={styles.txtLink}>
                         Berapa nomor saya?
                      </Text>

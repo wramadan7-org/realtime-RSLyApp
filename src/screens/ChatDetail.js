@@ -4,113 +4,25 @@ import {
    TextInput, ScrollView, StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Material from 'react-native-vector-icons/MaterialIcons';
+
+// import header
+import Header from '../components/HeaderChatDetail';
 
 class ChatDetail extends Component {
    render() {
       return (
          <>
+            <Header />
             <View style={styles.parent}>
                <ScrollView>
                   <View style={styles.receiver}>
                      <Text style={styles.txtReceiver}>
                         Pcc mbekdawdawawdadawdawdawdddadwdawdwadawdawdawdawwwwwwwwwwdwaaaaaaaaaaaaaaaaa
                      </Text>
-                     <View style={styles.spacingReceiver} />
                   </View>
 
                   <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <View style={styles.spacingSeeder} />
                      <Text style={styles.txtSender}>
                         Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
                      </Text>
@@ -118,38 +30,42 @@ class ChatDetail extends Component {
 
                   <View style={styles.receiver}>
                      <Text style={styles.txtReceiver}>
-                        Pcc mbekdawdawawdadawdawdawdddadwdawdwadawdawdawdawwwwwwwwwwdwaaaaaaaaaaaaaaaaa
+                        Hoalahlahlahlahah
                      </Text>
-                     <View style={styles.spacingReceiver} />
                   </View>
 
-
-                  <View style={styles.receiver}>
-                     <Text style={styles.txtReceiver}>
-                        Pcc mbekdawdawawdadawdawdawdddadwdawdwadawdawdawdawwwwwwwwwwdwaaaaaaaaaaaaaaaaa
+                  <View style={styles.sender}>
+                     <Text style={styles.txtSender}>
+                        Omahdawwwwwwwwwwwwwwww
                      </Text>
-                     <View style={styles.spacingReceiver} />
+                  </View>
+
+                  <View style={styles.sender}>
+                     <Text style={styles.txtSender}>
+                        Omahdawwwwwwwwwww
+                        dwa ad daw daw adw daw adwawdawdawd
+                     </Text>
                   </View>
 
                </ScrollView>
             </View>
             <View style={styles.footer}>
                <View style={styles.inputGroup}>
-                  <View style={styles.viewIcon}>
-                     <Icon style={styles.icon} name="paperclip" size={28} color="grey" />
-                  </View>
+                  <TouchableOpacity style={styles.viewIcon} onPress={() => this.props.navigation.navigate('ProfileFriend')}>
+                     <Material style={styles.icon} name="mood" size={28} color="grey" />
+                  </TouchableOpacity>
 
                   <View style={styles.viewInput}>
-                     <TextInput style={styles.txtInput} placeholder="Ketik pesan" />
+                     <TextInput style={styles.txtInput} multiline={true} placeholder="Ketik pesan" />
                   </View>
 
-                  <View style={styles.viewIcon}>
+                  <TouchableOpacity style={styles.viewIcon} onPress={() => this.props.navigation.navigate('Setting')} >
                      <Icon style={styles.icon} name="paperclip" size={25} color="grey" />
-                  </View>
+                  </TouchableOpacity>
 
-                  <View style={styles.viewIcon}>
+                  <TouchableOpacity style={styles.viewIcon}>
                      <Icon style={styles.icon} name="camera" size={24} color="grey" />
-                  </View>
+                  </TouchableOpacity>
                </View>
 
                <View style={styles.viewBtnVoice}>
@@ -180,32 +96,22 @@ const styles = StyleSheet.create({
    sender: {
       marginVertical: 5,
       flexDirection: 'row',
+      alignSelf: 'flex-end',
    },
    txtReceiver: {
-      // borderWidth: 1,
       elevation: 2,
       backgroundColor: 'white',
-      flex: 6,
+      marginRight: 70,
       borderRadius: 10,
+      padding: 5,
    },
    txtSender: {
       elevation: 2,
       backgroundColor: '#b2ff59',
-      flex: 8,
-      // borderWidth: 1,
-      textAlign: 'right',
       borderRadius: 10,
-   },
-   spacingReceiver: {
-      // backgroundColor: 'red',
-      flex: 1,
-      // borderWidth: 1,
-   },
-   spacingSeeder: {
-      // backgroundColor: 'red',
-      flex: 2,
-      width: 20,
-      // borderWidth: 1,
+      marginLeft: 70,
+      padding: 5,
+      alignSelf: 'flex-end',
    },
    footer: {
       flex: 2,
@@ -214,13 +120,16 @@ const styles = StyleSheet.create({
       // backgroundColor: 'rgba(52, 52, 52, 0.8)',
       alignItems: 'center',
       height: 70,
+      paddingHorizontal: 5,
+      marginVertical: 10,
    },
    inputGroup: {
       flexDirection: 'row',
       backgroundColor: 'white',
       height: 50,
       borderRadius: 100,
-      flex: 7,
+      flex: 6,
+      elevation: 2,
    },
    viewIcon: {
       // borderWidth: 1,
@@ -247,6 +156,9 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       height: 50,
+      width: 50,
+      marginLeft: 2,
+      elevation: 1,
 
       borderRadius: 100,
    },
