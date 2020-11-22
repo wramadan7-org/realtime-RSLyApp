@@ -22,9 +22,9 @@ class ProfileFriend extends Component {
       return (
          <View style={styles.parent}>
             <ScrollView>
-               <View style={styles.viewPhotoProfile}>
+               <TouchableOpacity style={styles.viewPhotoProfile} onPress={() => this.props.navigation.navigate('PhotoProfile')}>
                   <Image style={styles.photoProfile} source={img} />
-               </View>
+               </TouchableOpacity>
 
                {/* media */}
                <View style={styles.content}>

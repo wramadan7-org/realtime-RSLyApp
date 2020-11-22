@@ -8,11 +8,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import img from '../assets/images/mila.jpeg';
 
-const Setting = () => {
+const Setting = ({navigation}) => {
    return (
       <View style={styles.parent}>
          <ScrollView>
-            <TouchableOpacity style={styles.viewProfile}>
+            <TouchableOpacity style={styles.viewProfile} onPress={() => navigation.navigate('Profile')}>
                <View style={styles.viewPhotoProfile}>
                   <Image style={styles.photoProfile} source={img} />
                </View>

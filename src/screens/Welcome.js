@@ -4,11 +4,13 @@ import {
   TouchableOpacity, StyleSheet, Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useSelector} from 'react-redux';
 
 //impor logo
 import Logo from '../assets/images/logos/logo.png';
 
 function Welcome({navigation}) {
+  const globalState = useSelector(state => state);
   return (
     <View style={styles.parent}>
 
@@ -16,7 +18,7 @@ function Welcome({navigation}) {
 
         <View style={styles.viewHeader}>
           <Text style={styles.txtHeader}>
-            Selamat datang di RamslyApp
+            Selamat datang di RamslyApp {globalState.name}
           </Text>
         </View>
 

@@ -1,15 +1,12 @@
 import React from 'react';
 import {
-   View, Text, StyleSheet,
-   FlatList, Image, TouchableOpacity,
+   View, Text, StyleSheet, ScrollView,
+   TouchableOpacity, FlatList, Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Logo from '../assets/images/logos/logo.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialIcons';
-
-// import component
-import Header from '../components/Header';
+import Logo from '../assets/images/mila.jpeg';
 
 const DATA = [
    {
@@ -17,7 +14,8 @@ const DATA = [
       image: Logo,
       name: 'Wahyu Ramadan',
       message: 'Sido ngopi pora?',
-      status: false,
+      send: false,
+      status: 'Sibuk',
       time: '12.03',
    },
 
@@ -26,7 +24,8 @@ const DATA = [
       image: Logo,
       name: 'Wahyu Aldyansah',
       message: 'Sampean nnd mas?',
-      status: true,
+      send: true,
+      status: 'Sibuk',
       time: '12.03',
    },
 
@@ -35,7 +34,8 @@ const DATA = [
       image: Logo,
       name: 'SAAAYANGKU',
       message: 'Aku nugas sek ya yang',
-      status: false,
+      send: false,
+      status: 'Sibuk',
       time: '12.03',
    },
 
@@ -44,7 +44,8 @@ const DATA = [
       image: Logo,
       name: 'SAAAYANGKU',
       message: 'Aku nugas sek ya yang',
-      status: false,
+      send: false,
+      status: 'Sibuk',
       time: '12.03',
    },
 
@@ -53,7 +54,8 @@ const DATA = [
       image: Logo,
       name: 'SAAAYANGKU',
       message: 'Aku nugas sek ya yang',
-      status: false,
+      send: false,
+      status: 'Sibuk',
       time: '12.03',
    },
 
@@ -62,7 +64,8 @@ const DATA = [
       image: Logo,
       name: 'SAAAYANGKU',
       message: 'Aku nugas sek ya yang',
-      status: false,
+      send: false,
+      status: 'Sibuk',
       time: '12.03',
    },
 
@@ -71,7 +74,8 @@ const DATA = [
       image: Logo,
       name: 'SAAAYANGKU',
       message: 'Aku nugas sek ya yang',
-      status: false,
+      send: false,
+      status: 'Sibuk',
       time: '12.03',
    },
 
@@ -80,12 +84,13 @@ const DATA = [
       image: Logo,
       name: 'SAAAYANGKU',
       message: 'Aku nugas sek ya yang',
-      status: false,
+      send: false,
+      status: 'Sibuk',
       time: '12.03',
    },
 ];
 
-const Item = ({image, name, message, status, time}) => {
+const Item = ({image, name, message, send, time, status}) => {
    const navigation = useNavigation();
    return (
       <>
@@ -102,17 +107,8 @@ const Item = ({image, name, message, status, time}) => {
                   </View>
 
                   <View style={styles.viewTexting}>
-                     <Icon name="check" size={20} color="grey"  />
-                     <Text style={styles.txtMessage}>{message}</Text>
+                     <Text style={styles.status}>{status}</Text>
                   </View>
-               </View>
-
-               <View>
-                  <Text>{status}</Text>
-               </View>
-
-               <View>
-                  <Text>{time}</Text>
                </View>
             </View>
          </TouchableOpacity>
@@ -121,45 +117,67 @@ const Item = ({image, name, message, status, time}) => {
    );
 };
 
-const ChatList = () => {
-
-   const navigation = useNavigation();
+function ChooseFriend() {
 
    const renderItem = ({item}) => (
       <Item
          image={item.image}
          name={item.name}
          message={item.message}
-         status={item.status}
+         send={item.send}
          time={item.time}
+         status={item.status}
       />
    );
 
-      return (
-         <>
-            <Header />
-            <View style={styles.parent}>
+   return (
+      <>
+         <View style={styles.parent}>
+            <ScrollView>
+               <TouchableOpacity style={styles.btnChoise} >
+                  <View style={styles.viewBtnImage}>
+                     <View style={styles.backgroundIcon}>
+                        <Material name="group" size={20} color="white" />
+                     </View>
+                  </View>
+
+                  <Text style={styles.title}>
+                     Group baru
+                  </Text>
+               </TouchableOpacity>
+
+               <TouchableOpacity style={styles.btnChoise} >
+                  <View style={styles.viewBtnImage}>
+                     <View style={styles.backgroundIcon}>
+                        <Icon name="user-plus" size={20} color="white" />
+                     </View>
+                  </View>
+
+                  <View style={styles.grupTxtBtn}>
+                     <Text style={styles.title}>
+                        Kontak baru
+                     </Text>
+
+                     <TouchableOpacity>
+                        <Icon style={styles.iconCode} name="qrcode" size={25} color="#004d40" />
+                     </TouchableOpacity>
+                  </View>
+               </TouchableOpacity>
+
                <FlatList
                   data={DATA}
                   renderItem={renderItem}
                   keyExtractor={(item, index) => index.toString()}
-                  style={styles.flat}
                />
-               <View style={styles.viewBtn}>
-                  <TouchableOpacity style={styles.btnChat} onPress={() => navigation.navigate('ChooseFriend')}>
-                     <Material name="chat" size={20} color="white" />
-                  </TouchableOpacity>
-               </View>
-            </View>
-         </>
+            </ScrollView>
+         </View>
+      </>
    );
-};
+}
 
 const styles = StyleSheet.create({
    parent: {
       padding: 10,
-      flex: 1,
-      borderWidth: 1,
    },
    item: {
       flexDirection: 'row',
@@ -175,15 +193,15 @@ const styles = StyleSheet.create({
       alignSelf: 'center',
    },
    profile: {
-      width: 65,
-      height: 60,
+      width: 50,
+      height: 50,
       borderRadius: 100,
       // borderWidth: 1,
    },
    groupList: {
       flex: 1,
       flexDirection: 'row',
-      borderBottomWidth: 1,
+      // borderBottomWidth: 1,
       justifyContent: 'space-between',
       alignItems: 'center',
    },
@@ -210,34 +228,44 @@ const styles = StyleSheet.create({
       height: 25,
       alignItems: 'center',
    },
-   txtMessage: {
+   status: {
       marginLeft: 5,
       color: 'grey',
       fontSize: 17,
    },
-   flat: {
-      flex: 1,
+   btnChoise: {
+      flexDirection: 'row',
+      alignItems: 'center',
    },
-   viewBtn: {
-      // borderWidth: 1,
-      // flex: 1,,
-      width: 70,
-      height: '100%',
-      justifyContent: 'flex-end',
-      alignSelf: 'flex-end',
-      flexWrap: 'wrap',
-      position: 'absolute',
-   },
-   btnChat: {
-      position: 'absolute',
+   viewBtnImage: {
       justifyContent: 'center',
-      width: 60,
-      height: 60,
+      width: 65,
+      height: 70,
+      borderWidth: 1,
+      alignItems: 'center',
+   },
+   backgroundIcon: {
+      width: 50,
+      height: 50,
       borderRadius: 100,
       backgroundColor: 'limegreen',
       alignItems: 'center',
-      elevation: 2,
+      justifyContent: 'center',
+   },
+   title: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      fontFamily: 'times new roman',
+   },
+   grupTxtBtn: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flex: 1,
+   },
+   iconCode: {
+      marginRight: 20,
    },
 });
 
-export default ChatList;
+export default ChooseFriend;
