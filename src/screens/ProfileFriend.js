@@ -19,6 +19,7 @@ class ProfileFriend extends Component {
    }
 
    render() {
+      console.log(this.props.route.params);
       return (
          <View style={styles.parent}>
             <ScrollView>

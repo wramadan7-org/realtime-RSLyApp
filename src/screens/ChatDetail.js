@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
    Text, View, TouchableOpacity,
    TextInput, ScrollView, StyleSheet,
@@ -9,82 +9,101 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 // import header
 import Header from '../components/HeaderChatDetail';
 
-class ChatDetail extends Component {
-   render() {
-      return (
-         <>
-            <Header />
-            <View style={styles.parent}>
-               <ScrollView>
+import chatAction from '../redux/actions/chat';
+import {useSelector, useDispatch} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+
+const ChatDetail = ({route}) => {
+   const dispatch = useDispatch();
+   const {token} = useSelector(state => state.login);
+   const detailChatState = useSelector(state => state.detailChat);
+   const sendState = useSelector(state => state.sendChat);
+   const {isLoading, isError, data, alertMsg} = detailChatState;
+   const {success} = sendState;
+   const idParams = route.params;
+   const navigation = useNavigation();
+
+   const [isMessage, setMessage] = useState('');
+
+   useEffect(() => {
+      console.log('params',idParams);
+      dispatch(chatAction.chatDetail(token, idParams));
+      console.log(dispatch(chatAction.chatDetail(token, idParams)));
+   }, [sendState]);
+
+   const sendMessage = (e) => {
+      e.preventDefault();
+      const data = {
+         message: isMessage,
+      };
+
+      if (success === true) {
+         setMessage('');
+      }
+      console.log(dispatch(chatAction.sendChat(token, idParams, data)));
+   };
+
+   // console.log('params',route.params);
+   return (
+      <>
+         <Header friend={idParams} />
+         <View style={styles.parent}>
+            <ScrollView>
+            {!isLoading && !isError && data && data.map(o => (
+            // console.log('message ooo',o.message)
+            <>
+               {o.receiver === idParams  || o.sender === idParams && (
                   <View style={styles.receiver}>
                      <Text style={styles.txtReceiver}>
-                        Pcc mbekdawdawawdadawdawdawdddadwdawdwadawdawdawdawwwwwwwwwwdwaaaaaaaaaaaaaaaaa
+                        {o.message}
                      </Text>
                   </View>
+               )}
 
+               {o.receiver !== idParams  || o.sender !== idParams && (
                   <View style={styles.sender}>
                      <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwwwdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                        {o.message}
                      </Text>
                   </View>
-
-                  <View style={styles.receiver}>
-                     <Text style={styles.txtReceiver}>
-                        Hoalahlahlahlahah
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwwwwwwww
-                     </Text>
-                  </View>
-
-                  <View style={styles.sender}>
-                     <Text style={styles.txtSender}>
-                        Omahdawwwwwwwwwww
-                        dwa ad daw daw adw daw adwawdawdawd
-                     </Text>
-                  </View>
-
+               )}
+            </>
+               ))}
                </ScrollView>
-            </View>
-            <View style={styles.footer}>
-               <View style={styles.inputGroup}>
-                  <TouchableOpacity style={styles.viewIcon} onPress={() => this.props.navigation.navigate('ProfileFriend')}>
-                     <Material style={styles.icon} name="mood" size={28} color="grey" />
-                  </TouchableOpacity>
+         </View>
+         <View style={styles.footer}>
+            <View style={styles.inputGroup}>
+               <TouchableOpacity style={styles.viewIcon}>
+                  <Material style={styles.icon} name="mood" size={28} color="grey" />
+               </TouchableOpacity>
 
-                  <View style={styles.viewInput}>
-                     <TextInput style={styles.txtInput} multiline={true} placeholder="Ketik pesan" />
-                  </View>
-
-                  <TouchableOpacity style={styles.viewIcon} onPress={() => this.props.navigation.navigate('Setting')} >
-                     <Icon style={styles.icon} name="paperclip" size={25} color="grey" />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.viewIcon}>
-                     <Icon style={styles.icon} name="camera" size={24} color="grey" />
-                  </TouchableOpacity>
+               <View style={styles.viewInput}>
+               {/* onKeyPress={() => console.log('key')} */}
+                  <TextInput value={isMessage} style={styles.txtInput} multiline={true} placeholder="Ketik pesan" onChangeText={message => setMessage(message)} />
                </View>
 
-               <View style={styles.viewBtnVoice}>
-                  <TouchableOpacity style={styles.btnVoice}>
-                     <Icon name="microphone" size={20} color="white" />
-                  </TouchableOpacity>
-               </View>
+               <TouchableOpacity style={styles.viewIcon}>
+                  <Icon style={styles.icon} name="paperclip" size={25} color="grey" />
+               </TouchableOpacity>
+
+               <TouchableOpacity style={styles.viewIcon}>
+                  <Icon style={styles.icon} name="camera" size={24} color="grey" />
+               </TouchableOpacity>
             </View>
-         </>
-      );
-   }
-}
+
+            <View style={styles.viewBtnVoice}>
+               <TouchableOpacity style={styles.btnVoice} onPress={sendMessage}>
+                  <Icon name="microphone" size={20} color="white" />
+               </TouchableOpacity>
+            </View>
+         </View>
+      </>
+   );
+};
 
 const styles = StyleSheet.create({
    parent: {
       padding: 5,
-      flex: 14,
-   },
-   listChat: {
       flex: 1,
    },
    receiver: {
@@ -114,12 +133,13 @@ const styles = StyleSheet.create({
       alignSelf: 'flex-end',
    },
    footer: {
-      flex: 2,
+      // flex: 1,
+      // borderWidth:1,
       flexDirection: 'row',
       // borderWidth: 1,
       // backgroundColor: 'rgba(52, 52, 52, 0.8)',
       alignItems: 'center',
-      height: 70,
+      // height: 70,
       paddingHorizontal: 5,
       marginVertical: 10,
    },

@@ -1,13 +1,40 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
    View, Text, StyleSheet,
    TouchableOpacity, TextInput,
 } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialIcons';
 
-function ChangeName() {
+import profileAction from '../redux/actions/profile';
+
+function ChangeName({name, phone, profile}) {
+
+   const {token} = useSelector(state => state.login);
+   const profileState = useSelector(state => state.myProfile);
+
+   const [isName, setName] = useState(name);
+   const [isPhone, setPhone] = useState(phone);
+   const [isProfile, setProfile] = useState(profile);
+   const [alertMsg, setAlertMsg] = useState();
+   console.log(isProfile);
+
+   const dispatch = useDispatch();
+
+   const handleSubmit = () => {
+      console.log(isName);
+      console.log(profile.length);
+      console.log('state',profileState);
+      const data = {
+         name: isName,
+         phone: isPhone,
+         profile: isProfile,
+      };
+      dispatch(profileAction.updateProfile(token, data));
+   };
+
    return (
 
          <View style={StyleSheet.parent}>
@@ -19,7 +46,7 @@ function ChangeName() {
 
             <View style={styles.grupTxtInput}>
                <View style={styles.viewTxtInput}>
-                  <TextInput style={styles.txtInput} placeholder="RAMZZZ" />
+                  <TextInput style={styles.txtInput} placeholder="Name" value={isName} onChangeText={stateName => setName(stateName)} />
                   <Text style={styles.character}>
                      19
                   </Text>
@@ -37,7 +64,7 @@ function ChangeName() {
                   </Text>
                </TouchableOpacity>
 
-               <TouchableOpacity style={styles.btn}>
+               <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
                   <Text style={styles.txtBtn}>
                      SIMPAN
                   </Text>

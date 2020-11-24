@@ -4,16 +4,12 @@ import promiseMiddleware from 'redux-promise-middleware';
 
 import rootReducer from './reducers/';
 
-// const store = createStore(
-//    rootReducer,
-//    applyMiddleware(
-//       promiseMiddleware,
-//       logger
-//    )
-// );
-
 const store = createStore(
-   rootReducer
+   rootReducer,
+   applyMiddleware(
+      promiseMiddleware,
+      logger
+   )
 );
 
 export default store;

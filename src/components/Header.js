@@ -1,77 +1,72 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import {
    Text, View, TouchableOpacity,
    StyleSheet,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingList from '../screens/SettingList';
 
-class Header extends Component {
+import {useNavigation} from '@react-navigation/native';
 
-   constructor(props) {
-      super(props);
-      this.state = {
-         setting: false,
-      };
-   }
+const Header = () => {
 
-   render() {
-      return (
-         <View style={styles.parent}>
-            <View style={styles.viewTop}>
-               <View style={styles.viewAppName}>
-                  <Text style={styles.txtAppName}>RSLy App</Text>
-               </View>
+   const [setting, setSetting] = useState(false);
 
-               <View style={styles.viewGroupIcon}>
-                  <View style={styles.groupIcon}>
-                     <TouchableOpacity>
-                        <Icon name="search" size={20} color="white" />
-                     </TouchableOpacity>
-                     <TouchableOpacity>
-                        <Icon name="ellipsis-v" size={20} color="white" />
-                     </TouchableOpacity>
-                  </View>
-               </View>
+   const navigation = useNavigation();
+   return (
+      <View style={styles.parent}>
+         <View style={styles.viewTop}>
+            <View style={styles.viewAppName}>
+               <Text style={styles.txtAppName}>RSLy App</Text>
             </View>
 
-            <View style={styles.viewBottom}>
-               <View style={styles.viewIconCamera}>
-                  <Icon name="camera" size={25} color="grey" />
-               </View>
-
-               <View style={styles.viewBtn}>
-                  <TouchableOpacity style={styles.btn}>
-                     <Text style={styles.txtBtn}>CHAT</Text>
-                     <View style={styles.notif}>
-                        <Text>1</Text>
-                     </View>
+            <View style={styles.viewGroupIcon}>
+               <View style={styles.groupIcon}>
+                  <TouchableOpacity>
+                     <Icon name="search" size={20} color="white" />
                   </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.btn}>
-                     <Text style={styles.txtBtn}>STATUS</Text>
-                     <View style={styles.notifStatus} />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.btn}>
-                     <Text style={styles.txtBtn}>PANGGILAN</Text>
-                     <View style={styles.notif}>
-                        <Text>1</Text>
-                     </View>
+                  <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+                     <Icon name="ellipsis-v" size={20} color="white" />
                   </TouchableOpacity>
                </View>
             </View>
-
-            {this.state.setting === true && (
-               // <View style={{alignSelf: 'flex-end'}}>
-                     <SettingList />
-               // </View>
-            )}
          </View>
-      );
-   }
-}
+
+         <View style={styles.viewBottom}>
+            <View style={styles.viewIconCamera}>
+               <Icon name="camera" size={25} color="grey" />
+            </View>
+
+            <View style={styles.viewBtn}>
+               <TouchableOpacity style={styles.btn}>
+                  <Text style={styles.txtBtn}>CHAT</Text>
+                  <View style={styles.notif}>
+                     <Text>1</Text>
+                  </View>
+               </TouchableOpacity>
+
+               <TouchableOpacity style={styles.btn}>
+                  <Text style={styles.txtBtn}>STATUS</Text>
+                  <View style={styles.notifStatus} />
+               </TouchableOpacity>
+
+               <TouchableOpacity style={styles.btn}>
+                  <Text style={styles.txtBtn}>PANGGILAN</Text>
+                  <View style={styles.notif}>
+                     <Text>1</Text>
+                  </View>
+               </TouchableOpacity>
+            </View>
+         </View>
+
+         {setSetting === true && (
+            // <View style={{alignSelf: 'flex-end'}}>
+                  <SettingList />
+            // </View>
+         )}
+      </View>
+   );
+};
 
 const styles = StyleSheet.create({
    parent: {

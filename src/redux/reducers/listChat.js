@@ -1,35 +1,34 @@
 const initialState = {
-   isLogin: false,
-   isError: false,
+   data: [],
    isLoading: false,
+   isError: false,
    alertMsg: '',
-   token: '',
+   success: false,
 };
 
 export default (state = initialState, action) => {
    switch (action.type) {
-      case 'LOGIN_PENDING': {
+      case 'LIST_CHAT_PENDING': {
          return {
             ...state,
             isLoading: true,
          };
       }
-      case 'LOGIN_REJECTED': {
+      case 'LIST_CHAT_REJECTED': {
          return {
             ...state,
             isLoading: false,
             isError: true,
-            isLogin: false,
             alertMsg: 'Rejected',
          };
       }
-      case 'LOGIN_FULFILLED': {
+      case 'LIST_CHAT_FULFILLED': {
          return {
             ...state,
             isLoading: false,
             isError: false,
-            isLogin: action.payload.data.success,
-            token: action.payload.data.token,
+            success: action.payload.data.success,
+            data: action.payload.data.results,
          };
       }
       default: {

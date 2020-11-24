@@ -1,134 +1,152 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
    View, Text, ScrollView,
    TouchableOpacity, StyleSheet, Image,
 } from 'react-native';
+import {APP_URL} from '@env';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import img from '../assets/images/mila.jpeg';
+import profileAction from '../redux/actions/profile';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Setting = ({navigation}) => {
+
+   const profileState = useSelector(state => state.myProfile);
+   const authState = useSelector(state => state.login);
+   const {token} = authState;
+   const {isLoading, isError, data, alertMsg} = profileState;
+   const dispatch = useDispatch();
+   useEffect(() => {
+      dispatch(profileAction.myProfile(token));
+      console.log(dispatch(profileAction.myProfile(token)));
+   },[]);
+
    return (
       <View style={styles.parent}>
          <ScrollView>
-            <TouchableOpacity style={styles.viewProfile} onPress={() => navigation.navigate('Profile')}>
-               <View style={styles.viewPhotoProfile}>
-                  <Image style={styles.photoProfile} source={img} />
+            {!isLoading && !isError && data && (
+               <>
+               <TouchableOpacity style={styles.viewProfile} onPress={() => navigation.navigate('Profile')}>
+                  <View style={styles.viewPhotoProfile}>
+                     <Image style={styles.photoProfile} source={{uri: `${APP_URL}${data.profile}`}} />
+                  </View>
+
+                  <View style={styles.viewDescProfile}>
+                     <Text style={styles.txtName}>
+                        {data.name}
+                     </Text>
+                     <Text style={styles.txtStatus}>
+                        {data.info}
+                     </Text>
+                  </View>
+
+                  <TouchableOpacity style={styles.btnBarcode}>
+                     <Icon name="qrcode" size={30} color="#004d40" />
+                  </TouchableOpacity>
+               </TouchableOpacity>
+
+               <View style={styles.opsi}>
+                  <TouchableOpacity style={styles.btnOpsi}>
+                     <View style={styles.viewIcon}>
+                        <Icon style={styles.icon} name="key" size={30} color="#004d40" />
+                     </View>
+
+                     <View style={styles.viewDescOpsi}>
+                        <Text style={styles.title}>
+                           Akun
+                        </Text>
+                        <Text style={styles.subtitle}>
+                           Provasi, keamanan, ganti nomor
+                        </Text>
+                     </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.btnOpsi}>
+                     <View style={styles.viewIcon}>
+                        <Material style={styles.icon} name="chat" size={30} color="#004d40" />
+                     </View>
+
+                     <View style={styles.viewDescOpsi}>
+                        <Text style={styles.title}>
+                           Chat
+                        </Text>
+                        <Text style={styles.subtitle}>
+                           Tema, wallpaper, riwayat chat
+                        </Text>
+                     </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.btnOpsi}>
+                     <View style={styles.viewIcon}>
+                        <Material style={styles.icon} name="notifications" size={30} color="#004d40" />
+                     </View>
+
+                     <View style={styles.viewDescOpsi}>
+                        <Text style={styles.title}>
+                           Notifikasi
+                        </Text>
+                        <Text style={styles.subtitle}>
+                           Pesan, grup & nada dering panggilan
+                        </Text>
+                     </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.btnOpsi}>
+                     <View style={styles.viewIcon}>
+                        <Icon style={styles.icon} name="circle" size={30} color="#004d40" />
+                     </View>
+
+                     <View style={styles.viewDescOpsi}>
+                        <Text style={styles.title}>
+                           Data dan penyesuaian
+                        </Text>
+                        <Text style={styles.subtitle}>
+                           Penggunaan jaringan, unduh otomatis
+                        </Text>
+                     </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.btnOpsi}>
+                     <View style={styles.viewIcon}>
+                        <Material style={styles.icon} name="help" size={30} color="#004d40" />
+                     </View>
+
+                     <View style={styles.viewDescOpsi}>
+                        <Text style={styles.title}>
+                           Bantuan
+                        </Text>
+                        <Text style={styles.subtitle}>
+                           Pusat Bantuan, hubungi kami, kebijakan privasi
+                        </Text>
+                     </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.btnOpsi}>
+                     <View style={styles.viewIcon}>
+                        <Material style={styles.icon} name="group" size={30} color="#004d40" />
+                     </View>
+
+                     <View style={styles.viewDescOpsiInvite}>
+                        <Text style={styles.title}>
+                           Undang teman
+                        </Text>
+                     </View>
+                  </TouchableOpacity>
+
+                  <View style={styles.viewFooter}>
+                     <Text style={styles.from}>
+                        from
+                     </Text>
+
+                     <Text style={styles.facebook}>
+                        FACEBOOK
+                     </Text>
+                  </View>
                </View>
-
-               <View style={styles.viewDescProfile}>
-                  <Text style={styles.txtName}>
-                     RAMZZZ
-                  </Text>
-                  <Text style={styles.txtStatus}>
-                     TRUST NO ONE
-                  </Text>
-               </View>
-
-               <TouchableOpacity style={styles.btnBarcode}>
-                  <Icon name="qrcode" size={30} color="#004d40" />
-               </TouchableOpacity>
-            </TouchableOpacity>
-
-            <View style={styles.opsi}>
-               <TouchableOpacity style={styles.btnOpsi}>
-                  <View style={styles.viewIcon}>
-                     <Icon style={styles.icon} name="key" size={30} color="#004d40" />
-                  </View>
-
-                  <View style={styles.viewDescOpsi}>
-                     <Text style={styles.title}>
-                        Akun
-                     </Text>
-                     <Text style={styles.subtitle}>
-                        Provasi, keamanan, ganti nomor
-                     </Text>
-                  </View>
-               </TouchableOpacity>
-
-               <TouchableOpacity style={styles.btnOpsi}>
-                  <View style={styles.viewIcon}>
-                     <Material style={styles.icon} name="chat" size={30} color="#004d40" />
-                  </View>
-
-                  <View style={styles.viewDescOpsi}>
-                     <Text style={styles.title}>
-                        Chat
-                     </Text>
-                     <Text style={styles.subtitle}>
-                        Tema, wallpaper, riwayat chat
-                     </Text>
-                  </View>
-               </TouchableOpacity>
-
-               <TouchableOpacity style={styles.btnOpsi}>
-                  <View style={styles.viewIcon}>
-                     <Material style={styles.icon} name="notifications" size={30} color="#004d40" />
-                  </View>
-
-                  <View style={styles.viewDescOpsi}>
-                     <Text style={styles.title}>
-                        Notifikasi
-                     </Text>
-                     <Text style={styles.subtitle}>
-                        Pesan, grup & nada dering panggilan
-                     </Text>
-                  </View>
-               </TouchableOpacity>
-
-               <TouchableOpacity style={styles.btnOpsi}>
-                  <View style={styles.viewIcon}>
-                     <Icon style={styles.icon} name="circle" size={30} color="#004d40" />
-                  </View>
-
-                  <View style={styles.viewDescOpsi}>
-                     <Text style={styles.title}>
-                        Data dan penyesuaian
-                     </Text>
-                     <Text style={styles.subtitle}>
-                        Penggunaan jaringan, unduh otomatis
-                     </Text>
-                  </View>
-               </TouchableOpacity>
-
-               <TouchableOpacity style={styles.btnOpsi}>
-                  <View style={styles.viewIcon}>
-                     <Material style={styles.icon} name="help" size={30} color="#004d40" />
-                  </View>
-
-                  <View style={styles.viewDescOpsi}>
-                     <Text style={styles.title}>
-                        Bantuan
-                     </Text>
-                     <Text style={styles.subtitle}>
-                        Pusat Bantuan, hubungi kami, kebijakan privasi
-                     </Text>
-                  </View>
-               </TouchableOpacity>
-
-               <TouchableOpacity style={styles.btnOpsi}>
-                  <View style={styles.viewIcon}>
-                     <Material style={styles.icon} name="group" size={30} color="#004d40" />
-                  </View>
-
-                  <View style={styles.viewDescOpsiInvite}>
-                     <Text style={styles.title}>
-                        Undang teman
-                     </Text>
-                  </View>
-               </TouchableOpacity>
-
-               <View style={styles.viewFooter}>
-                  <Text style={styles.from}>
-                     from
-                  </Text>
-
-                  <Text style={styles.facebook}>
-                     FACEBOOK
-                  </Text>
-               </View>
-            </View>
+               </>
+            )}
          </ScrollView>
       </View>
    );

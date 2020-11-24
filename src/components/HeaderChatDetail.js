@@ -1,43 +1,62 @@
-import React, { Component } from 'react';
+import React, {useEffect} from 'react';
 import {
    Text, View, TouchableOpacity, StyleSheet, Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialIcons';
 
-import img from '../assets/images/mila.jpeg';
+import img from '../assets/images/default.jpg';
 
-class HeaderChatDetail extends Component {
-   render() {
-      return (
-         <>
-            <View style={styles.parent}>
-               <View style={styles.left}>
-                  <TouchableOpacity style={styles.btnBack} onPress={() => this.props.navigation.navigate('Welcome')}>
-                     <Material name="arrow-back" size={25} color="white" />
-                     <Image source={img} style={styles.photoProfile} />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.btnProfile}>
-                     <Text style={styles.txtName}>Mila</Text>
-                  </TouchableOpacity>
-               </View>
+import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+import profileAction from '../redux/actions/profile';
 
-               <View style={styles.viewIcon}>
-                  <TouchableOpacity onPress={() => console.log('OHH')}>
-                     <Material style={styles.icon} name="videocam" size={25} color="white" />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                     <Icon style={styles.icon} name="phone" size={25} color="white" />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                     <Icon style={styles.icon} name="ellipsis-v" size={20} color="white" />
-                  </TouchableOpacity>
-               </View>
-            </View>
-         </>
-      );
-   }
-}
+import {APP_URL} from '@env';
+
+const HeaderChatDetail = ({friend}) => {
+   const dispatch = useDispatch();
+   const navigation = useNavigation();
+   const profileState = useSelector(state => state.profileFriend);
+   const {token} = useSelector(state => state.login);
+   const {isLoading, isError, success, data, alertMsg} = profileState;
+   console.log('PARAMS HEADER', friend);
+
+   useEffect(() => {
+      console.log(dispatch(profileAction.friendProfile(token,friend)));
+   }, [friend]);
+
+   return (
+      <>
+         <View style={styles.parent}>
+            {!isLoading && !isError && data && (
+               <>
+                  <View style={styles.left}>
+                     <TouchableOpacity style={styles.btnBack} onPress={() => navigation.navigate('ChatList')}>
+                        <Material name="arrow-back" size={25} color="white" />
+                        <Image source={data.profile === null ? img : {uri: `${APP_URL}${data.profile}`}} style={styles.photoProfile} />
+                     </TouchableOpacity>
+                     <TouchableOpacity style={styles.btnProfile} onPress={() => navigation.navigate('ProfileFriend', friend)}>
+                        <Text style={styles.txtName}>{data.name}</Text>
+                     </TouchableOpacity>
+                  </View>
+
+                  <View style={styles.viewIcon}>
+                     <TouchableOpacity onPress={() => console.log('OHH')}>
+                        <Material style={styles.icon} name="videocam" size={25} color="white" />
+                     </TouchableOpacity>
+                     <TouchableOpacity>
+                        <Icon style={styles.icon} name="phone" size={25} color="white" />
+                     </TouchableOpacity>
+                     <TouchableOpacity>
+                        <Icon style={styles.icon} name="ellipsis-v" size={20} color="white" />
+                     </TouchableOpacity>
+                  </View>
+               </>
+            )}
+         </View>
+      </>
+   );
+};
 
 const styles = StyleSheet.create({
    parent: {

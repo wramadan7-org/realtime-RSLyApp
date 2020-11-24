@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {
    View, Text, StyleSheet,
    FlatList, Image, TouchableOpacity,
@@ -7,98 +8,38 @@ import {useNavigation} from '@react-navigation/native';
 import Logo from '../assets/images/logos/logo.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialIcons';
+import {APP_URL} from '@env';
+
+import chatAction from '../redux/actions/chat';
+import profileAction from '../redux/actions/profile';
 
 // import component
 import Header from '../components/Header';
 
-const DATA = [
-   {
-      id: 1,
-      image: Logo,
-      name: 'Wahyu Ramadan',
-      message: 'Sido ngopi pora?',
-      status: false,
-      time: '12.03',
-   },
+import img from '../assets/images/default.jpg';
 
-   {
-      id: 2,
-      image: Logo,
-      name: 'Wahyu Aldyansah',
-      message: 'Sampean nnd mas?',
-      status: true,
-      time: '12.03',
-   },
-
-   {
-      id: 3,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      status: false,
-      time: '12.03',
-   },
-
-   {
-      id: 4,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      status: false,
-      time: '12.03',
-   },
-
-   {
-      id: 5,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      status: false,
-      time: '12.03',
-   },
-
-   {
-      id: 6,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      status: false,
-      time: '12.03',
-   },
-
-   {
-      id: 7,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      status: false,
-      time: '12.03',
-   },
-
-   {
-      id: 8,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      status: false,
-      time: '12.03',
-   },
-];
-
-const Item = ({image, name, message, status, time}) => {
+const Item = ({image, receiver, message, status, time, sender, penerima, pengirim}) => {
+   console.log('PENGIRIMMMMMM', pengirim.name);
    const navigation = useNavigation();
+   const profileState = useSelector(state => state.myProfile);
+   // const idProfile = profileState.data.id;
+   const {data} = profileState;
+   // console.log('items', profileState);
    return (
       <>
-         <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('ChatDetail')}>
+      {data.id === receiver ? (
+         <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('ChatDetail', sender)}>
 
             <View style={styles.viewImage}>
-               <Image source={image} style={styles.profile} />
+               <Image source={pengirim.profile === null ? img : {uri: `${APP_URL}${pengirim.profile}`}} style={styles.profile} />
             </View>
 
             <View style={styles.groupList}>
                <View style={styles.viewMessage}>
                   <View style={styles.viewName}>
-                     <Text style={styles.txtName}>{name}</Text>
+                        <Text style={styles.txtName}> {pengirim.name !== null ? pengirim.name : pengirim.phone}</Text>
+                        {/* <Text style={styles.txtName}>recevier: {receiver}</Text> */}
+                        {/* <Image source={img} style={styles.profile} /> */}
                   </View>
 
                   <View style={styles.viewTexting}>
@@ -116,22 +57,74 @@ const Item = ({image, name, message, status, time}) => {
                </View>
             </View>
          </TouchableOpacity>
+      ) : (
+         <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('ChatDetail', receiver)}>
 
+            <View style={styles.viewImage}>
+               <Image source={penerima.profile === null ? img : {uri: `${APP_URL}${penerima.profile}`}} style={styles.profile} />
+            </View>
+
+            <View style={styles.groupList}>
+               <View style={styles.viewMessage}>
+                  <View style={styles.viewName}>
+                        {/* <Text style={styles.txtName}>{sender}</Text> */}
+
+                        <Text style={styles.txtName}>{penerima.name !== null ? penerima.name : penerima.phone}</Text>
+                     {/* <Text style={styles.txtName}>Sender {sender}</Text> */}
+                  </View>
+
+                  <View style={styles.viewTexting}>
+                     <Icon name="check" size={20} color="grey"  />
+                     <Text style={styles.txtMessage}>{message}</Text>
+                  </View>
+               </View>
+
+               <View>
+                  <Text>{status}</Text>
+               </View>
+
+               <View>
+                  <Text>{time}</Text>
+               </View>
+            </View>
+         </TouchableOpacity>
+      )}
       </>
    );
 };
 
 const ChatList = () => {
+   const dispatch = useDispatch();
+   const {token} = useSelector(state => state.login);
+   const listState = useSelector(state => state.listChat);
+   // const profileState = useSelector(state => state.myProfile);
+   // const idProfile = profileState.data.id;
+   // console.log('id', idProfile);
+   console.log(listState);
+   const {isLoading, isError, data, alertMsg} = listState;
+
+   useEffect(() => {
+      dispatch(chatAction.listChat(token));
+      dispatch(profileAction.myProfile(token));
+      console.log('Profile',dispatch(profileAction.myProfile(token)));
+      console.log('useEffect',dispatch(chatAction.listChat(token)));
+      // console.log('PENERIMAAA', data.map(o=> {
+      //    return o.penerima;
+      // }));
+   }, []);
 
    const navigation = useNavigation();
 
    const renderItem = ({item}) => (
       <Item
          image={item.image}
-         name={item.name}
+         receiver={item.receiver}
+         sender={item.sender}
          message={item.message}
          status={item.status}
          time={item.time}
+         penerima={item.penerima}
+         pengirim={item.pengirim}
       />
    );
 
@@ -140,7 +133,7 @@ const ChatList = () => {
             <Header />
             <View style={styles.parent}>
                <FlatList
-                  data={DATA}
+                  data={data}
                   renderItem={renderItem}
                   keyExtractor={(item, index) => index.toString()}
                   style={styles.flat}

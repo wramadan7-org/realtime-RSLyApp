@@ -4,8 +4,25 @@ import {
    ScrollView, TextInput, StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {connect} from 'react-redux';
+import loginAction from '../redux/actions/login';
 
 class Register extends Component {
+
+   constructor(props) {
+      super(props);
+      this.state = {
+         phone: '',
+      };
+   }
+
+   doLogin = (e) => {
+      e.preventDefault();
+      const {phone} = this.state;
+      const data = {phone};
+      this.props.loginAction(data);
+   }
+
    render() {
       return (
          // parent
@@ -44,7 +61,7 @@ class Register extends Component {
                      <Text style={styles.txtPlush}>+</Text>
                      <TextInput style={styles.txtInitialPhone} value="62" maxLength={3}  />
                   </View>
-                  <TextInput style={styles.inputPhone} placeholder="nomor telepon" />
+                  <TextInput style={styles.inputPhone} onChangeText={phone => this.setState({phone})} placeholder="nomor telepon" />
                </View>
 
                <View style={styles.viewInfo}>
@@ -57,7 +74,7 @@ class Register extends Component {
 
             {/* footer */}
             <View style={styles.footer}>
-               <TouchableOpacity style={styles.btnFooter} onPress={() => this.props.navigation.navigate('ChatList')}>
+               <TouchableOpacity style={styles.btnFooter} onPress={this.doLogin}>
                   <Text style={styles.txtBtn}>LANJUT</Text>
                </TouchableOpacity>
             </View>
@@ -180,4 +197,12 @@ const styles = StyleSheet.create({
    },
 });
 
-export default Register;
+const mapStateToProps = state => ({
+   login: state.login,
+});
+
+const mapDispatchToProps = {
+   loginAction: loginAction.login,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

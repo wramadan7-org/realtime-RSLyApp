@@ -1,137 +1,162 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {
    View, Text, StyleSheet,
    TouchableOpacity, TextInput,
    Image, ScrollView,
 } from 'react-native';
+import { APP_URL } from '@env';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import img from '../assets/images/mila.jpeg';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import ImagePicker from 'react-native-image-picker';
+import profileAction from '../redux/actions/profile';
+import { useSelector, useDispatch } from 'react-redux';
 
 // IMPORT SCREEN
 import ChangeName from '../components/ChangeName';
 
 export default function Profile({navigation}) {
+
+   const profileState = useSelector(state => state.myProfile);
+   const authState = useSelector(state => state.login);
+   const {token} = authState;
+   const {isLoading, isError, data, alertMsg} = profileState;
+   const dispatch = useDispatch();
+
+   const [photoProfile, setPhotoProfile] = useState('');
+   const [isName, setName] = useState(data.name);
+
+   useEffect(() => {
+      dispatch(profileAction.myProfile(token));
+      console.log(dispatch(profileAction.myProfile(token)));
+   },[2]);
+   console.log(isName);
    const bottom = useRef();
    return (
       <View style={styles.parent}>
          <ScrollView>
-
-            <TouchableOpacity style={styles.viewPhoto} onPress={() => navigation.navigate('PhotoProfile') }>
-               <Image style={styles.photo} source={img} />
-               <View style={styles.viewBtnPhoto}>
-                  <TouchableOpacity style={styles.btnChangePhoto}>
-                     <Icon name="camera" size={20} color="white"/>
+            {!isLoading && !isError && data && (
+               <>
+                  <TouchableOpacity style={styles.viewPhoto} onPress={() => navigation.navigate('PhotoProfile') }>
+                     <Image style={styles.photo} source={{uri: `${APP_URL}${data.profile}`}} />
+                     <View style={styles.viewBtnPhoto}>
+                        <TouchableOpacity style={styles.btnChangePhoto}>
+                           <Icon name="camera" size={20} color="white"/>
+                        </TouchableOpacity>
+                     </View>
                   </TouchableOpacity>
-               </View>
-            </TouchableOpacity>
 
-            {/* BOTTOM SHEET  */}
-            <RBSheet
-               ref={bottom}
-               closeOnDragDown={true}
-               closeOnPressMask={false}
-               customStyles={{
-                  wrapper: {
-                     backgroundColor: 'transparent',
-                  },
-                  draggableIcon: {
-                     backgroundColor: '#000',
-                  },
-               }}
-            >
-               <View style={styles.contentSheet}>
-                  <ChangeName />
-               </View>
-            </RBSheet>
-
-            <View style={styles.choose}>
-               <TouchableOpacity style={styles.btnOpsi} onPress={() => bottom.current.open()}>
-                  <View style={styles.grupDesc}>
-                     <View style={styles.viewicon}>
-                        <Icon name="user" size={30} color="#004d40"/>
+                  {/* BOTTOM SHEET  */}
+                  <RBSheet
+                     ref={bottom}
+                     closeOnDragDown={true}
+                     closeOnPressMask={false}
+                     customStyles={{
+                        wrapper: {
+                           backgroundColor: 'transparent',
+                        },
+                        draggableIcon: {
+                           backgroundColor: '#000',
+                        },
+                     }}
+                  >
+                     <View style={styles.contentSheet}>
+                        <ChangeName
+                           name={data.name}
+                           phone={data.phone}
+                           profile={data.profile}
+                        />
                      </View>
+                  </RBSheet>
 
-                     <View style={styles.txtGrup}>
-                        <View style={styles.viewOpsi}>
-                           <View style={styles.titleDesc}>
-                              <Text style={styles.title}>
-                                 Name
-                              </Text>
-
-                              <Text style={styles.txtProfile}>
-                                 RAMZZZ
-                              </Text>
+                  <View style={styles.choose}>
+                     <TouchableOpacity style={styles.btnOpsi} onPress={() => bottom.current.open()}>
+                        <View style={styles.grupDesc}>
+                           <View style={styles.viewicon}>
+                              <Icon name="user" size={30} color="#004d40"/>
                            </View>
 
-                           <View style={styles.viewIconDesc}>
-                              <Material name="create" size={25} color="grey"/>
+                           <View style={styles.txtGrup}>
+                              <View style={styles.viewOpsi}>
+                                 <View style={styles.titleDesc}>
+                                    <Text style={styles.title}>
+                                       Name
+                                    </Text>
+
+                                    <Text style={styles.txtProfile}>
+                                       {data.name}
+                                    </Text>
+                                 </View>
+
+                                 <View style={styles.viewIconDesc}>
+                                    <Material name="create" size={25} color="grey"/>
+                                 </View>
+                              </View>
+
+                              <View style={styles.subtitle}>
+                                 <Text style={styles.txtSubtitle}>
+                                    Ini bukan nama panegguna atau PIN Anda.
+                                    Nama ini akan terlihat oleh kontak RamSLyApp Anda.
+                                 </Text>
+                              </View>
                            </View>
                         </View>
 
-                        <View style={styles.subtitle}>
-                           <Text style={styles.txtSubtitle}>
-                              Ini bukan nama panegguna atau PIN Anda.
-                              Nama ini akan terlihat oleh kontak RamSLyApp Anda.
-                           </Text>
-                        </View>
-                     </View>
+                     </TouchableOpacity>
+
+
+                     <TouchableOpacity style={styles.btnOpsi}>
+                        <View style={styles.grupDesc}>
+                              <View style={styles.viewicon}>
+                                 <Material name="info" size={30} color="#004d40"/>
+                              </View>
+
+                              <View style={styles.txtGrup}>
+                                 <View style={styles.viewOpsi}>
+                                    <View style={styles.titleDesc}>
+                                       <Text style={styles.title}>
+                                          Info
+                                       </Text>
+
+                                       <Text style={styles.txtProfile}>
+                                          TRUST NO ONE
+                                       </Text>
+                                    </View>
+
+                                    <View style={styles.viewIconDesc}>
+                                       <Material name="create" size={25} color="grey"/>
+                                    </View>
+                                 </View>
+                              </View>
+                           </View>
+                     </TouchableOpacity>
+
+
+                     <TouchableOpacity style={styles.btnOpsi}>
+                        <View style={styles.grupDesc}>
+                              <View style={styles.viewicon}>
+                                 <Icon name="phone" size={30} color="#004d40"/>
+                              </View>
+
+                              <View style={styles.txtGrup}>
+                                 <View style={styles.viewOpsi}>
+                                    <View style={styles.titleDesc}>
+                                       <Text style={styles.title}>
+                                          Telepon
+                                       </Text>
+
+                                       <Text style={styles.txtProfile}>
+                                          +62 822-5702-2981
+                                       </Text>
+                                    </View>
+                                 </View>
+                              </View>
+                           </View>
+                     </TouchableOpacity>
                   </View>
-
-               </TouchableOpacity>
-
-
-               <TouchableOpacity style={styles.btnOpsi}>
-                  <View style={styles.grupDesc}>
-                        <View style={styles.viewicon}>
-                           <Material name="info" size={30} color="#004d40"/>
-                        </View>
-
-                        <View style={styles.txtGrup}>
-                           <View style={styles.viewOpsi}>
-                              <View style={styles.titleDesc}>
-                                 <Text style={styles.title}>
-                                    Info
-                                 </Text>
-
-                                 <Text style={styles.txtProfile}>
-                                    TRUST NO ONE
-                                 </Text>
-                              </View>
-
-                              <View style={styles.viewIconDesc}>
-                                 <Material name="create" size={25} color="grey"/>
-                              </View>
-                           </View>
-                        </View>
-                     </View>
-               </TouchableOpacity>
-
-
-               <TouchableOpacity style={styles.btnOpsi}>
-                  <View style={styles.grupDesc}>
-                        <View style={styles.viewicon}>
-                           <Icon name="phone" size={30} color="#004d40"/>
-                        </View>
-
-                        <View style={styles.txtGrup}>
-                           <View style={styles.viewOpsi}>
-                              <View style={styles.titleDesc}>
-                                 <Text style={styles.title}>
-                                    Telepon
-                                 </Text>
-
-                                 <Text style={styles.txtProfile}>
-                                    +62 822-5702-2981
-                                 </Text>
-                              </View>
-                           </View>
-                        </View>
-                     </View>
-               </TouchableOpacity>
-            </View>
+               </>
+            )}
          </ScrollView>
       </View>
    );
