@@ -7,6 +7,14 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import img from '../assets/images/mila.jpeg';
+import defaultPicture from '../assets/images/default.jpg';
+
+import profileAction from '../redux/actions/profile';
+
+import {connect} from 'react-redux';
+import {APP_URL} from '@env';
+
+import HeaderFriend from '../components/HeaderFriend';
 
 
 class ProfileFriend extends Component {
@@ -18,199 +26,215 @@ class ProfileFriend extends Component {
       };
    }
 
+   componentDidMount() {
+      const {token} = this.props.getToken;
+      const param = this.props.route.params;
+      console.log('uhuyyyy',this.props.watchProfileFriend(token, param));
+
+   }
+
+
    render() {
-      console.log(this.props.route.params);
+      const {isLoading, isError, data, alertMsg} = this.props.profileFriend;
+      console.log('profile', data.profile);
       return (
+         <>
+         <HeaderFriend friend={this.props.route.params} />
          <View style={styles.parent}>
             <ScrollView>
-               <TouchableOpacity style={styles.viewPhotoProfile} onPress={() => this.props.navigation.navigate('PhotoProfile')}>
-                  <Image style={styles.photoProfile} source={img} />
-               </TouchableOpacity>
+               {!isLoading && !isError && data && (
+                  <>
+                     <TouchableOpacity style={styles.viewPhotoProfile} onPress={() => this.props.navigation.navigate('PhotoProfileFriend', data.id)}>
+                        <Image style={styles.photoProfile} source={data.profile ? {uri: `${APP_URL}${data.profile}`} : defaultPicture} />
+                     </TouchableOpacity>
 
-               {/* media */}
-               <View style={styles.content}>
-                  <TouchableOpacity style={styles.MediaFile}>
-                     <Text style={styles.txtTitle}>
-                        Media, tautan, dan dokumen
-                     </Text>
-                     <View style={styles.viewTotalFile}>
-                        <Text style={styles.txtTotal}>
-                           17
-                        </Text>
-                        <Icon name="angle-right" size={25} color="grey" />
-                     </View>
-                  </TouchableOpacity>
-
-                  <ScrollView style={styles.scrollListFile} horizontal>
-                     <View style={styles.viewListFile}>
-                        <TouchableOpacity style={styles.listFile}>
-                           <Image style={styles.file} source={img} />
+                     {/* media */}
+                     <View style={styles.content}>
+                        <TouchableOpacity style={styles.MediaFile}>
+                           <Text style={styles.txtTitle}>
+                              Media, tautan, dan dokumen
+                           </Text>
+                           <View style={styles.viewTotalFile}>
+                              <Text style={styles.txtTotal}>
+                                 17
+                              </Text>
+                              <Icon name="angle-right" size={25} color="grey" />
+                           </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.listFile}>
-                           <Image style={styles.file} source={img} />
+                        <ScrollView style={styles.scrollListFile} horizontal>
+                           <View style={styles.viewListFile}>
+                              <TouchableOpacity style={styles.listFile}>
+                                 <Image style={styles.file} source={img} />
+                              </TouchableOpacity>
+
+                              <TouchableOpacity style={styles.listFile}>
+                                 <Image style={styles.file} source={img} />
+                              </TouchableOpacity>
+
+                              <TouchableOpacity style={styles.listFile}>
+                                 <Image style={styles.file} source={img} />
+                              </TouchableOpacity>
+
+                              <TouchableOpacity style={styles.listFile}>
+                                 <Image style={styles.file} source={img} />
+                              </TouchableOpacity>
+
+                              <TouchableOpacity style={styles.listFile}>
+                                 <Image style={styles.file} source={img} />
+                              </TouchableOpacity>
+                           </View>
+                           <TouchableOpacity style={styles.allFile}>
+                              <Icon name="angle-right" size={45} color="grey" />
+                           </TouchableOpacity>
+                        </ScrollView>
+                     </View>
+
+                     <View style={styles.content}>
+                        <TouchableOpacity style={styles.btnOptions}>
+                           <Text style={styles.desc}>
+                              Bisukan notifikasi
+                           </Text>
+                           <Switch
+                              // warna pillnya, jika false maka abuabu, jika betul maka liemgreen
+                              trackColor={{false: '#767577', true: 'liemgreen'}}
+                              // warna lingkaran jika true maka hijau, jika tidak maka putih
+                              thumbColor={this.state.switchMute ? 'green' : '#f4f3f4'}
+                              onValueChange={(value) => this.setState({switchMute: value})}
+                              value={this.state.switchMute}
+                              style={styles.switch}
+                           />
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.listFile}>
-                           <Image style={styles.file} source={img} />
+                        <TouchableOpacity style={styles.btnOptions}>
+                           <Text style={styles.desc}>
+                              Notifikasi khusus
+                           </Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.listFile}>
-                           <Image style={styles.file} source={img} />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.listFile}>
-                           <Image style={styles.file} source={img} />
+                        <TouchableOpacity style={styles.btnOptions}>
+                           <Text style={styles.desc}>
+                              Tampilkan media
+                           </Text>
                         </TouchableOpacity>
                      </View>
-                     <TouchableOpacity style={styles.allFile}>
-                        <Icon name="angle-right" size={45} color="grey" />
-                     </TouchableOpacity>
-                  </ScrollView>
-               </View>
 
-               <View style={styles.content}>
-                  <TouchableOpacity style={styles.btnOptions}>
-                     <Text style={styles.desc}>
-                        Bisukan notifikasi
-                     </Text>
-                     <Switch
-                        // warna pillnya, jika false maka abuabu, jika betul maka liemgreen
-                        trackColor={{false: '#767577', true: 'liemgreen'}}
-                        // warna lingkaran jika true maka hijau, jika tidak maka putih
-                        thumbColor={this.state.switchMute ? 'green' : '#f4f3f4'}
-                        onValueChange={(value) => this.setState({switchMute: value})}
-                        value={this.state.switchMute}
-                        style={styles.switch}
-                     />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.btnOptions}>
-                     <Text style={styles.desc}>
-                        Notifikasi khusus
-                     </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.btnOptions}>
-                     <Text style={styles.desc}>
-                        Tampilkan media
-                     </Text>
-                  </TouchableOpacity>
-               </View>
-
-               <View style={styles.content}>
-                  <TouchableOpacity style={styles.btnEncript}>
-                     <View style={styles.viewDesc}>
-                        <Text style={styles.desc}>
-                           Enkripsi
-                        </Text>
-                        <Text style={styles.subDesc}>
-                           Pesan dan panggilan terenkripsi
-                           secara end-to-end. Ketuk untuk memverifikasi,
-                        </Text>
-                     </View>
-                     <Material style={styles.icon} name="lock" size={30} color="#004d40" />
-                  </TouchableOpacity>
-               </View>
-
-               <View style={styles.content}>
-                  <Text style={styles.titleGreen}>
-                     Nomor telepone
-                  </Text>
-                  <TouchableOpacity style={styles.btnNumber}>
-                     <View style={styles.viewDesc}>
-                        <Text style={styles.desc}>
-                           +62 822-570-229-981
-                        </Text>
-                        <Text style={styles.subDesc}>
-                           Ponsel
-                        </Text>
+                     <View style={styles.content}>
+                        <TouchableOpacity style={styles.btnEncript}>
+                           <View style={styles.viewDesc}>
+                              <Text style={styles.desc}>
+                                 Enkripsi
+                              </Text>
+                              <Text style={styles.subDesc}>
+                                 Pesan dan panggilan terenkripsi
+                                 secara end-to-end. Ketuk untuk memverifikasi,
+                              </Text>
+                           </View>
+                           <Material style={styles.icon} name="lock" size={30} color="#004d40" />
+                        </TouchableOpacity>
                      </View>
 
-                     <TouchableOpacity>
-                        <Material style={styles.icon} name="chat" size={30} color="#004d40" />
-                     </TouchableOpacity>
-
-                     <TouchableOpacity>
-                        <Icon style={styles.icon} name="phone" size={30} color="#004d40" />
-                     </TouchableOpacity>
-
-                     <TouchableOpacity>
-                        <Material style={styles.icon} name="videocam" size={30} color="#004d40" />
-                     </TouchableOpacity>
-                  </TouchableOpacity>
-               </View>
-
-               <View style={styles.content}>
-                  <View style={styles.titleGroupt}>
-                     <Text style={styles.titleGreen}>
-                        Grup yang sama
-                     </Text>
-                     <Text style={styles.txtTotal}>
-                        2
-                     </Text>
-                  </View>
-
-                  <TouchableOpacity style={styles.btnGrup}>
-                     <TouchableOpacity style={styles.btnProfileGrup}>
-                        <Image style={styles.photoGrup} source={img} />
-                     </TouchableOpacity>
-
-                     <View style={styles.viewDescGrup}>
-                        <Text style={styles.desc}>
-                           ALUMNI XII RPL
+                     <View style={styles.content}>
+                        <Text style={styles.titleGreen}>
+                           Nomor telepone
                         </Text>
-                        <Text style={styles.namePerson}>
-                           Ahmad, Alda, Apip, Bagus, Bin, Bob, Boy
-                        </Text>
-                     </View>
-                  </TouchableOpacity>
+                        <TouchableOpacity style={styles.btnNumber}>
+                           <View style={styles.viewDesc}>
+                              <Text style={styles.desc}>
+                                 +62 {data.phone}
+                              </Text>
+                              <Text style={styles.subDesc}>
+                                 Ponsel
+                              </Text>
+                           </View>
 
-                  <TouchableOpacity style={styles.btnGrup}>
-                     <TouchableOpacity style={styles.btnProfileGrup}>
-                        <Image style={styles.photoGrup} source={img} />
-                     </TouchableOpacity>
+                           <TouchableOpacity>
+                              <Material style={styles.icon} name="chat" size={30} color="#004d40" />
+                           </TouchableOpacity>
 
-                     <View style={styles.viewDescGrup}>
-                        <Text style={styles.desc}>
-                           XII RPL INFO
-                        </Text>
-                        <Text style={styles.namePerson}>
-                           Ahmad, Alda, Apip, Bagus, Bin, Bob, Boy Apip, Bagus, Bin, Bob, Boy
-                        </Text>
-                     </View>
-                  </TouchableOpacity>
-               </View>
+                           <TouchableOpacity>
+                              <Icon style={styles.icon} name="phone" size={30} color="#004d40" />
+                           </TouchableOpacity>
 
-               <View style={styles.content}>
-                  <TouchableOpacity style={styles.btnRed}>
-                     <View style={styles.viewIconRed}>
-                        <Material name="block" size={30} color="red"  />
+                           <TouchableOpacity>
+                              <Material style={styles.icon} name="videocam" size={30} color="#004d40" />
+                           </TouchableOpacity>
+                        </TouchableOpacity>
                      </View>
 
-                     <View style={styles.viewRed}>
-                        <Text style={styles.txtRed}>
-                           Blokir
-                        </Text>
-                     </View>
-                  </TouchableOpacity>
-               </View>
+                     <View style={styles.content}>
+                        <View style={styles.titleGroupt}>
+                           <Text style={styles.titleGreen}>
+                              Grup yang sama
+                           </Text>
+                           <Text style={styles.txtTotal}>
+                              2
+                           </Text>
+                        </View>
 
-               <View style={styles.content}>
-                  <TouchableOpacity style={styles.btnRed}>
-                     <View style={styles.viewIconRed}>
-                        <Material name="thumb-down-alt" size={30} color="red"  />
+                        <TouchableOpacity style={styles.btnGrup}>
+                           <TouchableOpacity style={styles.btnProfileGrup}>
+                              <Image style={styles.photoGrup} source={img} />
+                           </TouchableOpacity>
+
+                           <View style={styles.viewDescGrup}>
+                              <Text style={styles.desc}>
+                                 ALUMNI XII RPL
+                              </Text>
+                              <Text style={styles.namePerson}>
+                                 Ahmad, Alda, Apip, Bagus, Bin, Bob, Boy
+                              </Text>
+                           </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.btnGrup}>
+                           <TouchableOpacity style={styles.btnProfileGrup}>
+                              <Image style={styles.photoGrup} source={img} />
+                           </TouchableOpacity>
+
+                           <View style={styles.viewDescGrup}>
+                              <Text style={styles.desc}>
+                                 XII RPL INFO
+                              </Text>
+                              <Text style={styles.namePerson}>
+                                 Ahmad, Alda, Apip, Bagus, Bin, Bob, Boy Apip, Bagus, Bin, Bob, Boy
+                              </Text>
+                           </View>
+                        </TouchableOpacity>
                      </View>
 
-                     <View style={styles.viewRed}>
-                        <Text style={styles.txtRed}>
-                           Laporkan kontak
-                        </Text>
+                     <View style={styles.content}>
+                        <TouchableOpacity style={styles.btnRed}>
+                           <View style={styles.viewIconRed}>
+                              <Material name="block" size={30} color="red"  />
+                           </View>
+
+                           <View style={styles.viewRed}>
+                              <Text style={styles.txtRed}>
+                                 Blokir
+                              </Text>
+                           </View>
+                        </TouchableOpacity>
                      </View>
-                  </TouchableOpacity>
-               </View>
+
+                     <View style={styles.content}>
+                        <TouchableOpacity style={styles.btnRed}>
+                           <View style={styles.viewIconRed}>
+                              <Material name="thumb-down-alt" size={30} color="red"  />
+                           </View>
+
+                           <View style={styles.viewRed}>
+                              <Text style={styles.txtRed}>
+                                 Laporkan kontak
+                              </Text>
+                           </View>
+                        </TouchableOpacity>
+                     </View>
+                  </>
+               )}
             </ScrollView>
          </View>
+         </>
       );
    }
 }
@@ -225,6 +249,7 @@ const styles = StyleSheet.create({
       // flex: 1,
    },
    photoProfile: {
+      width: '100%',
       flex: 1,
       alignSelf: 'center',
    },
@@ -385,4 +410,13 @@ const styles = StyleSheet.create({
    },
 });
 
-export default ProfileFriend;
+const mapStateToProps = state => ({
+   getToken: state.login,
+   profileFriend: state.profileFriend,
+});
+
+const mapDispatchToProps = {
+   watchProfileFriend: profileAction.friendProfile,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileFriend);

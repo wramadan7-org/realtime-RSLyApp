@@ -7,107 +7,31 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import Logo from '../assets/images/mila.jpeg';
+import { useSelector, useDispatch } from 'react-redux';
 
-const DATA = [
-   {
-      id: 1,
-      image: Logo,
-      name: 'Wahyu Ramadan',
-      message: 'Sido ngopi pora?',
-      send: false,
-      status: 'Sibuk',
-      time: '12.03',
-   },
+import listFriendAction from '../redux/actions/profile';
 
-   {
-      id: 2,
-      image: Logo,
-      name: 'Wahyu Aldyansah',
-      message: 'Sampean nnd mas?',
-      send: true,
-      status: 'Sibuk',
-      time: '12.03',
-   },
+import defaultProfile from '../assets/images/default.jpg';
+import {APP_URL} from '@env';
 
-   {
-      id: 3,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      send: false,
-      status: 'Sibuk',
-      time: '12.03',
-   },
-
-   {
-      id: 4,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      send: false,
-      status: 'Sibuk',
-      time: '12.03',
-   },
-
-   {
-      id: 5,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      send: false,
-      status: 'Sibuk',
-      time: '12.03',
-   },
-
-   {
-      id: 6,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      send: false,
-      status: 'Sibuk',
-      time: '12.03',
-   },
-
-   {
-      id: 7,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      send: false,
-      status: 'Sibuk',
-      time: '12.03',
-   },
-
-   {
-      id: 8,
-      image: Logo,
-      name: 'SAAAYANGKU',
-      message: 'Aku nugas sek ya yang',
-      send: false,
-      status: 'Sibuk',
-      time: '12.03',
-   },
-];
-
-const Item = ({image, name, message, send, time, status}) => {
+const Item = ({id, profile, name, message, phone, info}) => {
    const navigation = useNavigation();
    return (
       <>
-         <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('ChatDetail')}>
+         <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('ChatDetail', id)}>
 
             <View style={styles.viewImage}>
-               <Image source={image} style={styles.profile} />
+               <Image source={profile ? {uri: `${APP_URL}${profile}`} : defaultProfile} style={styles.profile} />
             </View>
 
             <View style={styles.groupList}>
                <View style={styles.viewMessage}>
                   <View style={styles.viewName}>
-                     <Text style={styles.txtName}>{name}</Text>
+                     <Text style={styles.txtName}>{name ? name : phone}</Text>
                   </View>
 
                   <View style={styles.viewTexting}>
-                     <Text style={styles.status}>{status}</Text>
+                     <Text style={styles.status}>{info}</Text>
                   </View>
                </View>
             </View>
@@ -119,14 +43,22 @@ const Item = ({image, name, message, send, time, status}) => {
 
 function ChooseFriend() {
 
+   const friendListState = useSelector(state => state.listFriend);
+   const {data} = friendListState;
+   const dispatch = useDispatch();
+
+   React.useEffect(() => {
+      dispatch(listFriendAction.allFriend());
+   }, []);
+
    const renderItem = ({item}) => (
       <Item
-         image={item.image}
+         profile={item.profile}
          name={item.name}
          message={item.message}
-         send={item.send}
-         time={item.time}
-         status={item.status}
+         info={item.info}
+         phone={item.phone}
+         id={item.id}
       />
    );
 
@@ -165,7 +97,7 @@ function ChooseFriend() {
                </TouchableOpacity>
 
                <FlatList
-                  data={DATA}
+                  data={data}
                   renderItem={renderItem}
                   keyExtractor={(item, index) => index.toString()}
                />
@@ -241,7 +173,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       width: 65,
       height: 70,
-      borderWidth: 1,
+      // borderWidth: 1,
       alignItems: 'center',
    },
    backgroundIcon: {

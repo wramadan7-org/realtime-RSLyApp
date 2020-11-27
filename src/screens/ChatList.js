@@ -18,16 +18,16 @@ import Header from '../components/Header';
 
 import img from '../assets/images/default.jpg';
 
-const Item = ({image, receiver, message, status, time, sender, penerima, pengirim}) => {
+const Item = ({image, receiver, message, status, time, sender, penerima, pengirim, id}) => {
    console.log('PENGIRIMMMMMM', pengirim.name);
    const navigation = useNavigation();
-   const profileState = useSelector(state => state.myProfile);
+   // const profileState = useSelector(state => state.myProfile);
    // const idProfile = profileState.data.id;
-   const {data} = profileState;
+   // const {data} = profileState;
    // console.log('items', profileState);
    return (
       <>
-      {data.id === receiver ? (
+      {id === receiver ? (
          <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('ChatDetail', sender)}>
 
             <View style={styles.viewImage}>
@@ -97,21 +97,15 @@ const ChatList = () => {
    const dispatch = useDispatch();
    const {token} = useSelector(state => state.login);
    const listState = useSelector(state => state.listChat);
-   // const profileState = useSelector(state => state.myProfile);
-   // const idProfile = profileState.data.id;
-   // console.log('id', idProfile);
-   console.log(listState);
+   const profileState = useSelector(state => state.myProfile);
+   const detailChatState = useSelector(state => state.detailChat);
    const {isLoading, isError, data, alertMsg} = listState;
 
    useEffect(() => {
       dispatch(chatAction.listChat(token));
       dispatch(profileAction.myProfile(token));
-      console.log('Profile',dispatch(profileAction.myProfile(token)));
-      console.log('useEffect',dispatch(chatAction.listChat(token)));
-      // console.log('PENERIMAAA', data.map(o=> {
-      //    return o.penerima;
-      // }));
-   }, []);
+      console.log('liststate',listState);
+   }, [detailChatState]);
 
    const navigation = useNavigation();
 
@@ -125,19 +119,27 @@ const ChatList = () => {
          time={item.time}
          penerima={item.penerima}
          pengirim={item.pengirim}
+         id={profileState.data.id}
       />
    );
+   console.log('dataaaaa',data);
 
       return (
          <>
             <Header />
             <View style={styles.parent}>
-               <FlatList
-                  data={data}
-                  renderItem={renderItem}
-                  keyExtractor={(item, index) => index.toString()}
-                  style={styles.flat}
-               />
+               {data ? (
+
+                  <FlatList
+                     data={data}
+                     renderItem={renderItem}
+                     keyExtractor={(item, index) => index.toString()}
+                     extraData={data}
+                     style={styles.flat}
+                  />
+               ) : (
+                  <View />
+               )}
                <View style={styles.viewBtn}>
                   <TouchableOpacity style={styles.btnChat} onPress={() => navigation.navigate('ChooseFriend')}>
                      <Material name="chat" size={20} color="white" />

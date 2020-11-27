@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
    View, Text, StyleSheet,
    TouchableOpacity, TextInput,
@@ -10,10 +10,13 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 
 import profileAction from '../redux/actions/profile';
 
+import {useNavigation} from '@react-navigation/native';
+
 function ChangeName({name, phone, profile}) {
 
    const {token} = useSelector(state => state.login);
    const profileState = useSelector(state => state.myProfile);
+   const updateNameState = useSelector(state => state.updateProfile);
 
    const [isName, setName] = useState(name);
    const [isPhone, setPhone] = useState(phone);
@@ -25,12 +28,9 @@ function ChangeName({name, phone, profile}) {
 
    const handleSubmit = () => {
       console.log(isName);
-      console.log(profile.length);
       console.log('state',profileState);
       const data = {
          name: isName,
-         phone: isPhone,
-         profile: isProfile,
       };
       dispatch(profileAction.updateProfile(token, data));
    };

@@ -9,8 +9,15 @@ import {useSelector} from 'react-redux';
 //impor logo
 import Logo from '../assets/images/logos/logo.png';
 
+import SplashScreen from 'react-native-splash-screen';
+
 function Welcome({navigation}) {
   const globalState = useSelector(state => state);
+
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <View style={styles.parent}>
 

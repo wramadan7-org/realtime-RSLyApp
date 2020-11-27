@@ -7,9 +7,10 @@ import {APP_URL} from '@env';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import img from '../assets/images/mila.jpeg';
 import profileAction from '../redux/actions/profile';
 import { useSelector, useDispatch } from 'react-redux';
+
+import defaultProfile from '../assets/images/default.jpg';
 
 const Setting = ({navigation}) => {
 
@@ -30,7 +31,7 @@ const Setting = ({navigation}) => {
                <>
                <TouchableOpacity style={styles.viewProfile} onPress={() => navigation.navigate('Profile')}>
                   <View style={styles.viewPhotoProfile}>
-                     <Image style={styles.photoProfile} source={{uri: `${APP_URL}${data.profile}`}} />
+                     <Image style={styles.photoProfile} source={data.profile === null ? defaultProfile : {uri: `${APP_URL}${data.profile}`}} />
                   </View>
 
                   <View style={styles.viewDescProfile}>

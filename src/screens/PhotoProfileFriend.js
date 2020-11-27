@@ -11,25 +11,26 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import Header from '../components/HeaderPhoto';
 
-function PhotoProfile() {
+function PhotoProfileFriend({route}) {
 
    const {token} = useSelector(state => state.login);
-   const profileState = useSelector(state => state.myProfile);
+   const profileState = useSelector(state => state.profileFriend);
    const {isLoading, isError, data, alertMsg} = profileState;
    const dispatch = useDispatch();
 
    React.useEffect(() => {
-      dispatch(profileAction.myProfile(token));
+      dispatch(profileAction.friendProfile(token, route.param));
    }, []);
+   console.log('asdjkawbakwdbawkdbjaw', data.name);
 
    return (
       <>
-      <Header myName={data.name} myPhone={data.phone} />
-      <View style={styles.parent}>
-         <View style={styles.viewPhoto}>
-            <Image style={styles.photo} source={data.profile ? {uri: `${APP_URL}${data.profile}`} : defaultProfile} />
+         <Header friend={data.name} friendPhone={data.phone} />
+         <View style={styles.parent}>
+            <View style={styles.viewPhoto}>
+               <Image style={styles.photo} source={data.profile ? {uri: `${APP_URL}${data.profile}`} : defaultProfile} />
+            </View>
          </View>
-      </View>
       </>
    );
 }
@@ -56,4 +57,4 @@ const styles = StyleSheet.create({
    },
 });
 
-export default PhotoProfile;
+export default PhotoProfileFriend;

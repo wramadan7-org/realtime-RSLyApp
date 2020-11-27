@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {Image, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
@@ -9,11 +9,12 @@ import Welcome from './Welcome';
 import Register from './Register';
 import ChatList from './ChatList';
 import ChatDetail from './ChatDetail';
-import HeaderChatDetail from '../components/HeaderChatDetail';
+// import HeaderChatDetail from '../components/HeaderChatDetail';
 import ProfileFriend from './ProfileFriend';
 import Setting from './Setting';
 import Profile from './Profile';
 import PhotoProfile from './PhotoProfile';
+import PhotoProfileFriend from './PhotoProfileFriend';
 import ChooseFriend from './ChooseFriend';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -30,11 +31,15 @@ const Stack = createStackNavigator();
 //   );
 // };
 
-function Main() {
+function Main({route}) {
 
   const loginState = useSelector(state => state.login);
+  const profileState = useSelector(state => state.myProfile);
+  console.log('route main', route);
+  const {data} = profileState;
   console.log(loginState);
-  const {isLogin, isLoading, isError, token, alertMsg} = loginState;
+  const {isLogin} = loginState;
+  console.log('loginlgngnggn');
 
   return (
     <NavigationContainer>
@@ -88,13 +93,14 @@ function Main() {
             name="ProfileFriend"
             component={ProfileFriend}
             options={{
-              title: 'Mila',
-              headerStyle: {
-                backgroundColor: '#004d40',
-              },
-              headerTitleStyle: {
-                color: 'white',
-              },
+              headerShown: false,
+              // title: `${data.name ? data.name : data.phone}`,
+              // headerStyle: {
+              //   backgroundColor: '#004d40',
+              // },
+              // headerTitleStyle: {
+              //   color: 'white',
+              // },
             }}
           />
           <Stack.Screen
@@ -127,13 +133,28 @@ function Main() {
             name="PhotoProfile"
             component={PhotoProfile}
             options={{
-              title: 'Mila',
-              headerStyle: {
-                backgroundColor: 'black',
-              },
-              headerTitleStyle: {
-                color: 'white',
-              },
+              headerShown: false,
+              // title: `${data.name ? data.name : data.phone}`,
+              // headerStyle: {
+              //   backgroundColor: 'black',
+              // },
+              // headerTitleStyle: {
+              //   color: 'white',
+              // },
+            }}
+          />
+          <Stack.Screen
+            name="PhotoProfileFriend"
+            component={PhotoProfileFriend}
+            options={{
+              headerShown: false,
+              // title: `${data.name ? data.name : data.phone}`,
+              // headerStyle: {
+              //   backgroundColor: 'black',
+              // },
+              // headerTitleStyle: {
+              //   color: 'white',
+              // },
             }}
           />
           <Stack.Screen

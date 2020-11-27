@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
    Text, View, TouchableOpacity,
-   TextInput, ScrollView, StyleSheet,
+   TextInput, ScrollView, StyleSheet, FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -10,8 +10,32 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/HeaderChatDetail';
 
 import chatAction from '../redux/actions/chat';
+import profileAction from '../redux/actions/profile';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+
+const Item = ({sender, receiver, message, idReceiver}) => {
+   console.log('ITEM SENDER', sender);
+   return (
+      <>
+         {receiver === idReceiver  || sender === idReceiver && (
+                  <View style={styles.receiver}>
+                     <Text style={styles.txtReceiver}>
+                        {message}
+                     </Text>
+                  </View>
+               )}
+
+               {receiver !== idReceiver  || sender !== idReceiver && (
+                  <View style={styles.sender}>
+                     <Text style={styles.txtSender}>
+                        {message}
+                     </Text>
+                  </View>
+               )}
+      </>
+   );
+};
 
 const ChatDetail = ({route}) => {
    const dispatch = useDispatch();
@@ -26,10 +50,18 @@ const ChatDetail = ({route}) => {
    const [isMessage, setMessage] = useState('');
 
    useEffect(() => {
-      console.log('params',idParams);
+      dispatch(profileAction.myProfile(token));
       dispatch(chatAction.chatDetail(token, idParams));
-      console.log(dispatch(chatAction.chatDetail(token, idParams)));
    }, [sendState]);
+
+   const renderItem = ({item}) => (
+      <Item
+         sender={item.sender}
+         receiver={item.receiver}
+         message={item.message}
+         idReceiver={idParams}
+      />
+   );
 
    const sendMessage = (e) => {
       e.preventDefault();
@@ -43,12 +75,19 @@ const ChatDetail = ({route}) => {
       console.log(dispatch(chatAction.sendChat(token, idParams, data)));
    };
 
+
    // console.log('params',route.params);
    return (
       <>
          <Header friend={idParams} />
          <View style={styles.parent}>
-            <ScrollView>
+            <FlatList
+               data={data}
+               renderItem={renderItem}
+               keyExtractor={(item, index) => index.toString()}
+               style={{flex: 1}}
+            />
+            {/* <ScrollView>
             {!isLoading && !isError && data && data.map(o => (
             // console.log('message ooo',o.message)
             <>
@@ -69,7 +108,7 @@ const ChatDetail = ({route}) => {
                )}
             </>
                ))}
-               </ScrollView>
+               </ScrollView> */}
          </View>
          <View style={styles.footer}>
             <View style={styles.inputGroup}>

@@ -6,6 +6,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
 import loginAction from '../redux/actions/login';
+import registerAction from '../redux/actions/register';
 
 class Register extends Component {
 
@@ -19,6 +20,7 @@ class Register extends Component {
    doLogin = (e) => {
       e.preventDefault();
       const {phone} = this.state;
+      console.log('ini state',this.props.register);
       const data = {phone};
       this.props.loginAction(data);
    }
@@ -199,10 +201,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
    login: state.login,
+   register: state.register,
 });
 
 const mapDispatchToProps = {
    loginAction: loginAction.login,
+   registerAction: registerAction.register,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

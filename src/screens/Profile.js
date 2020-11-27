@@ -1,47 +1,86 @@
+/* eslint-disable no-undef */
 import React, {useRef, useEffect, useState} from 'react';
 import {
    View, Text, StyleSheet,
    TouchableOpacity, TextInput,
-   Image, ScrollView,
+   Image, ScrollView, Alert,
 } from 'react-native';
 import { APP_URL } from '@env';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import img from '../assets/images/mila.jpeg';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import ImagePicker from 'react-native-image-picker';
 import profileAction from '../redux/actions/profile';
 import { useSelector, useDispatch } from 'react-redux';
 
+
+import defaultProfile from '../assets/images/default.jpg';
+
 // IMPORT SCREEN
 import ChangeName from '../components/ChangeName';
 
-export default function Profile({navigation}) {
+
+const Profile = ({navigation}) =>  {
+
 
    const profileState = useSelector(state => state.myProfile);
    const authState = useSelector(state => state.login);
    const {token} = authState;
    const {isLoading, isError, data, alertMsg} = profileState;
+   const updateState = useSelector(state => state.updateProfile);
+   const {name, profile} = updateState.data;
    const dispatch = useDispatch();
-
-   const [photoProfile, setPhotoProfile] = useState('');
-   const [isName, setName] = useState(data.name);
+   const bottom = useRef();
+   const dataFm = new FormData();
 
    useEffect(() => {
       dispatch(profileAction.myProfile(token));
-      console.log(dispatch(profileAction.myProfile(token)));
-   },[2]);
-   console.log(isName);
-   const bottom = useRef();
+   }, [updateState]);
+
+   const chooseImage = () => {
+      let options = {
+         title: 'Select Avatar',
+         cameraType: 'front',
+         mediaType: 'photo' ,
+         storageOptions: {
+            skipBackup: true,
+            path: 'images',
+         },
+      };
+      ImagePicker.showImagePicker(options, (response) => {
+         console.log('Response = ', response);
+
+         if (response.didCancel) {
+            console.log('User cancelled image picker');
+         } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+         } else if (response.customButton) {
+            console.log('User tapped custom button: ', response.customButton);
+            alert(response.customButton);
+         } else {
+            // console.log(response.fileName);
+            // const dataFm = new FormData();
+            dataFm.append('profile',{
+               uri: response.uri,
+               type: 'image/jpeg',
+               name: response.fileName,
+            });
+            // console.log(dataFm.append('thumbnail', {url: payload.thumbnail}))
+            dispatch(profileAction.updatePhotoProfile(token, dataFm));
+
+         }
+      });
+   };
+
    return (
       <View style={styles.parent}>
          <ScrollView>
             {!isLoading && !isError && data && (
                <>
                   <TouchableOpacity style={styles.viewPhoto} onPress={() => navigation.navigate('PhotoProfile') }>
-                     <Image style={styles.photo} source={{uri: `${APP_URL}${data.profile}`}} />
+                     <Image style={styles.photo} source={data.profile === null ? defaultProfile : {uri: `${APP_URL}${data.profile}`}} />
                      <View style={styles.viewBtnPhoto}>
-                        <TouchableOpacity style={styles.btnChangePhoto}>
+                        <TouchableOpacity style={styles.btnChangePhoto} onPress={chooseImage}>
                            <Icon name="camera" size={20} color="white"/>
                         </TouchableOpacity>
                      </View>
@@ -146,9 +185,14 @@ export default function Profile({navigation}) {
                                           Telepon
                                        </Text>
 
-                                       <Text style={styles.txtProfile}>
-                                          +62 822-5702-2981
-                                       </Text>
+                                       <View style={styles.viewPhone}>
+                                          <Text style={styles.txtProfile}>
+                                             +62 {''}
+                                          </Text>
+                                          <Text style={styles.txtProfile}>
+                                             {data.phone.slice(1, data.phone.length)}
+                                          </Text>
+                                       </View>
                                     </View>
                                  </View>
                               </View>
@@ -160,7 +204,7 @@ export default function Profile({navigation}) {
          </ScrollView>
       </View>
    );
-}
+};
 
 const styles = StyleSheet.create({
    parent: {
@@ -263,4 +307,9 @@ const styles = StyleSheet.create({
    contentSheet: {
       padding: 10,
    },
+   viewPhone: {
+      flexDirection: 'row',
+   },
 });
+
+export default Profile;

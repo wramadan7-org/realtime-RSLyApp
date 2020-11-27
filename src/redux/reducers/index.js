@@ -8,9 +8,11 @@ import sendChat from './sendChat';
 import myProfile from './myProfile';
 import profileFriend from './profileFriend';
 import updateProfile from './updateProfile';
+import updatePhotoProfile from './updatePhotoProfile';
+import listFriend from './listFriend';
 
 export default combineReducers({
-   // register,
+   register,
    login,
    listChat,
    detailChat,
@@ -18,4 +20,6 @@ export default combineReducers({
    myProfile,
    profileFriend,
    updateProfile,
+   listFriend,
+   updatePhotoProfile,
 });
