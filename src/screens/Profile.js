@@ -31,7 +31,6 @@ const Profile = ({navigation}) =>  {
    const {name, profile} = updateState.data;
    const dispatch = useDispatch();
    const bottom = useRef();
-   const dataFm = new FormData();
 
    useEffect(() => {
       dispatch(profileAction.myProfile(token));
@@ -60,6 +59,7 @@ const Profile = ({navigation}) =>  {
          } else {
             // console.log(response.fileName);
             // const dataFm = new FormData();
+            const dataFm = new FormData();
             dataFm.append('profile',{
                uri: response.uri,
                type: 'image/jpeg',

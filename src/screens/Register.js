@@ -1,85 +1,153 @@
 import React, { Component } from 'react';
 import {
    Text, View, TouchableOpacity,
-   ScrollView, TextInput, StyleSheet,
+   ScrollView, TextInput, StyleSheet, Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
 import loginAction from '../redux/actions/login';
 import registerAction from '../redux/actions/register';
+import {Formik} from 'formik';
+import * as yup from 'yup';
+import register from '../redux/actions/register';
 
 class Register extends Component {
 
-   constructor(props) {
-      super(props);
-      this.state = {
-         phone: '',
-      };
+   componentDidMount() {
+      this.props.login;
+      this.props.register;
    }
 
-   doLogin = (e) => {
-      e.preventDefault();
-      const {phone} = this.state;
-      console.log('ini state',this.props.register);
-      const data = {phone};
-      this.props.loginAction(data);
+   doRegister = async (values) => {
+      await this.props.registerAction(values);
+      const {success} = this.props.register;
+      if (!success) {
+         Alert.alert(
+            'Please insert your phone number currectly',
+            '',
+            [
+               {
+                  text: 'OK',
+                  onPress: () => console.log('OK pressed'),
+               },
+            ],
+            {cancelable: false}
+         );
+      }
+      if (success) {
+         this.props.loginAction(values);
+      }
+   }
+
+   doLogin = async (values) => {
+      await this.props.loginAction(values);
+      const {isLogin} = this.props.login;
+      if (!isLogin) {
+         Alert.alert(
+            'Phone is not registerd',
+            'Do you want to register it?',
+            [
+               {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+               },
+               {
+                  text: 'Yes',
+                  onPress: () => this.doRegister(values),
+               },
+            ],
+            {cancelable: false}
+         );
+      }
    }
 
    render() {
+
+      const validationPhone = yup.object().shape({
+         phone: yup
+            .number()
+            .min(11, ({min}) => `Your phone number is too shord, minimal ${min} character!`)
+            .required('Phone number is required'),
+      });
+
       return (
          // parent
          <View style={styles.parent}>
 
-            <View style={styles.wrapper}>
-               <View style={styles.viewHeader}>
-                  <Text style={styles.txtHeader}>
-                     Masukkan nomor telepon Anda
-                  </Text>
-                  <TouchableOpacity style={styles.btnEllipsis}>
-                     <Icon name="ellipsis-v" size={20} color="grey" />
-                  </TouchableOpacity>
-               </View>
+            <Formik
+               validationSchema={validationPhone}
+               initialValues={{phone: ''}}
+               onSubmit={values => this.doLogin(values)}
+            >
+               {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  values,
+                  errors,
+                  touched,
+               }) => (
+                  <>
+                     <View style={styles.wrapper}>
+                        <View style={styles.viewHeader}>
+                           <Text style={styles.txtHeader}>
+                              Masukkan nomor telepon Anda
+                           </Text>
+                           <TouchableOpacity style={styles.btnEllipsis}>
+                              <Icon name="ellipsis-v" size={20} color="grey" />
+                           </TouchableOpacity>
+                        </View>
 
-               <View style={styles.viewTxtDesc}>
-                  <Text style={styles.txtDesc}>
-                     RamSLyApp akan mengirim SMS untuk memverifikasi nomor telepon Anda.{' '}
-                     <Text style={styles.txtLink}>
-                        Berapa nomor saya?
-                     </Text>
-                  </Text>
-               </View>
+                        <View style={styles.viewTxtDesc}>
+                           <Text style={styles.txtDesc}>
+                              RamSLyApp akan mengirim SMS untuk memverifikasi nomor telepon Anda.{' '}
+                              <Text style={styles.txtLink}>
+                                 Berapa nomor saya?
+                              </Text>
+                           </Text>
+                        </View>
 
-               <View style={styles.inputGrup}>
-                  <TouchableOpacity style={styles.selectCountry}>
-                     <Text style={styles.txtCountry}>
-                        Indonesia
-                     </Text>
-                     <Icon name="sort-down" size={20} color="#004d40" style={styles.iconCountry} />
-                  </TouchableOpacity>
-               </View>
+                        <View style={styles.inputGrup}>
+                           <TouchableOpacity style={styles.selectCountry}>
+                              <Text style={styles.txtCountry}>
+                                 Indonesia
+                              </Text>
+                              <Icon name="sort-down" size={20} color="#004d40" style={styles.iconCountry} />
+                           </TouchableOpacity>
+                        </View>
 
-               <View style={styles.inputGrup}>
-                  <View style={styles.viewInitialPhone}>
-                     <Text style={styles.txtPlush}>+</Text>
-                     <TextInput style={styles.txtInitialPhone} value="62" maxLength={3}  />
-                  </View>
-                  <TextInput style={styles.inputPhone} onChangeText={phone => this.setState({phone})} placeholder="nomor telepon" />
-               </View>
+                        <View style={styles.inputGrup}>
+                           <View style={styles.viewInitialPhone}>
+                              <Text style={styles.txtPlush}>+</Text>
+                              <TextInput style={styles.txtInitialPhone} value="62" maxLength={3}  />
+                           </View>
+                           <TextInput
+                              style={styles.inputPhone}
+                              onChangeText={handleChange('phone')}
+                              placeholder="nomor telepon"
+                           />
+                        </View>
+                        {errors.phone && touched.phone &&
+                           <Text style={styles.error}>{errors.phone}</Text>
+                        }
 
-               <View style={styles.viewInfo}>
-                  <Text style={styles.txtInfo}>
-                     Biaya SMS operator telepone mungkin berlaku
-                  </Text>
-               </View>
+                        <View style={styles.viewInfo}>
+                           <Text style={styles.txtInfo}>
+                              Biaya SMS operator telepone mungkin berlaku
+                           </Text>
+                        </View>
 
-            </View>
+                     </View>
 
-            {/* footer */}
-            <View style={styles.footer}>
-               <TouchableOpacity style={styles.btnFooter} onPress={this.doLogin}>
-                  <Text style={styles.txtBtn}>LANJUT</Text>
-               </TouchableOpacity>
-            </View>
+                     <View style={styles.footer}>
+                        <TouchableOpacity style={styles.btnFooter} onPress={handleSubmit}>
+                           <Text style={styles.txtBtn}>LANJUT</Text>
+                        </TouchableOpacity>
+                     </View>
+                  </>
+               )}
+
+            </Formik>
          </View>
       );
    }
@@ -197,6 +265,11 @@ const styles = StyleSheet.create({
       color: 'white',
       fontSize: 15,
    },
+   error: {
+      fontSize: 10,
+      color: 'red',
+      textAlign: 'center',
+    },
 });
 
 const mapStateToProps = state => ({

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.realtimechat">
+  package="com.tchat">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -24,7 +24,7 @@
         </intent-filter>
       </activity>
       <activity-alias
-            android:name="com.example.MainActivitychecked"
+            android:name="com.tchat.MainActivitychecked"
             android:enabled="true"
             android:icon="@mipmap/ic_launcher"
             android:targetActivity=".MainActivity">

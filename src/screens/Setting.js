@@ -9,10 +9,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import profileAction from '../redux/actions/profile';
 import { useSelector, useDispatch } from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 
 import defaultProfile from '../assets/images/default.jpg';
 
-const Setting = ({navigation}) => {
+const Setting = () => {
 
    const profileState = useSelector(state => state.myProfile);
    const authState = useSelector(state => state.login);
@@ -23,6 +24,8 @@ const Setting = ({navigation}) => {
       dispatch(profileAction.myProfile(token));
       console.log(dispatch(profileAction.myProfile(token)));
    },[]);
+
+   const navigation = useNavigation();
 
    return (
       <View style={styles.parent}>
@@ -49,7 +52,7 @@ const Setting = ({navigation}) => {
                </TouchableOpacity>
 
                <View style={styles.opsi}>
-                  <TouchableOpacity style={styles.btnOpsi}>
+                  <TouchableOpacity style={styles.btnOpsi} onPress={() => navigation.navigate('Account')}>
                      <View style={styles.viewIcon}>
                         <Icon style={styles.icon} name="key" size={30} color="#004d40" />
                      </View>

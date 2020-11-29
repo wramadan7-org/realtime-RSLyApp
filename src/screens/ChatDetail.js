@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialIcons';
+import moment from 'moment';
 
 // import header
 import Header from '../components/HeaderChatDetail';
@@ -14,14 +15,17 @@ import profileAction from '../redux/actions/profile';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
-const Item = ({sender, receiver, message, idReceiver}) => {
-   console.log('ITEM SENDER', sender);
+const Item = ({sender, receiver, message, time, idReceiver}) => {
+   // console.log('ITEM SENDER', sender);
    return (
       <>
          {receiver === idReceiver  || sender === idReceiver && (
                   <View style={styles.receiver}>
                      <Text style={styles.txtReceiver}>
-                        {message}
+                        {message} {' '}
+                        <Text style={styles.txtTime}>
+                           {time}
+                        </Text>
                      </Text>
                   </View>
                )}
@@ -29,7 +33,10 @@ const Item = ({sender, receiver, message, idReceiver}) => {
                {receiver !== idReceiver  || sender !== idReceiver && (
                   <View style={styles.sender}>
                      <Text style={styles.txtSender}>
-                        {message}
+                        {message} {' '}
+                        <Text style={styles.txtTime}>
+                           {time}
+                        </Text>
                      </Text>
                   </View>
                )}
@@ -59,6 +66,7 @@ const ChatDetail = ({route}) => {
          sender={item.sender}
          receiver={item.receiver}
          message={item.message}
+         time={moment(item.createdAt).format('LT')}
          idReceiver={idParams}
       />
    );
@@ -85,30 +93,10 @@ const ChatDetail = ({route}) => {
                data={data}
                renderItem={renderItem}
                keyExtractor={(item, index) => index.toString()}
+               // onEndReached={}
+               // onEndReachedThreshold={0.5}
                style={{flex: 1}}
             />
-            {/* <ScrollView>
-            {!isLoading && !isError && data && data.map(o => (
-            // console.log('message ooo',o.message)
-            <>
-               {o.receiver === idParams  || o.sender === idParams && (
-                  <View style={styles.receiver}>
-                     <Text style={styles.txtReceiver}>
-                        {o.message}
-                     </Text>
-                  </View>
-               )}
-
-               {o.receiver !== idParams  || o.sender !== idParams && (
-                  <View style={styles.sender}>
-                     <Text style={styles.txtSender}>
-                        {o.message}
-                     </Text>
-                  </View>
-               )}
-            </>
-               ))}
-               </ScrollView> */}
          </View>
          <View style={styles.footer}>
             <View style={styles.inputGroup}>
@@ -162,6 +150,7 @@ const styles = StyleSheet.create({
       marginRight: 70,
       borderRadius: 10,
       padding: 5,
+      fontSize: 16,
    },
    txtSender: {
       elevation: 2,
@@ -170,6 +159,11 @@ const styles = StyleSheet.create({
       marginLeft: 70,
       padding: 5,
       alignSelf: 'flex-end',
+      fontSize: 16,
+   },
+   txtTime: {
+      color: 'grey',
+      fontSize: 13,
    },
    footer: {
       // flex: 1,

@@ -3,20 +3,11 @@ import {
   Text, View,
   TouchableOpacity, StyleSheet, Image,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {useSelector} from 'react-redux';
 
 //impor logo
 import Logo from '../assets/images/logos/logo.png';
 
-import SplashScreen from 'react-native-splash-screen';
-
 function Welcome({navigation}) {
-  const globalState = useSelector(state => state);
-
-  React.useEffect(() => {
-    SplashScreen.hide();
-  }, []);
 
   return (
     <View style={styles.parent}>
@@ -25,7 +16,7 @@ function Welcome({navigation}) {
 
         <View style={styles.viewHeader}>
           <Text style={styles.txtHeader}>
-            Selamat datang di RamslyApp {globalState.name}
+            Selamat datang di TChat
           </Text>
         </View>
 

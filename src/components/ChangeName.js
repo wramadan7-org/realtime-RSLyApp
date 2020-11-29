@@ -26,13 +26,13 @@ function ChangeName({name, phone, profile}) {
 
    const dispatch = useDispatch();
 
-   const handleSubmit = () => {
+   const handleSubmit = async () => {
       console.log(isName);
       console.log('state',profileState);
       const data = {
          name: isName,
       };
-      dispatch(profileAction.updateProfile(token, data));
+      await dispatch(profileAction.updateProfile(token, data));
    };
 
    return (

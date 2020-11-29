@@ -16,9 +16,10 @@ import Profile from './Profile';
 import PhotoProfile from './PhotoProfile';
 import PhotoProfileFriend from './PhotoProfileFriend';
 import ChooseFriend from './ChooseFriend';
+import Account from './Account';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-// import img from '../assets/images/mila.jpeg';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createStackNavigator();
 
@@ -35,15 +36,19 @@ function Main({route}) {
 
   const loginState = useSelector(state => state.login);
   const profileState = useSelector(state => state.myProfile);
-  console.log('route main', route);
+  // console.log('route main', route);
   const {data} = profileState;
-  console.log(loginState);
-  const {isLogin} = loginState;
-  console.log('loginlgngnggn');
+  // console.log(loginState);
+  const {isLogin, token} = loginState;
+  // console.log('loginlgngnggn');
+
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   return (
     <NavigationContainer>
-      {!isLogin ? (
+      {!token ? (
         <Stack.Navigator>
           <Stack.Screen
             name="Welcome"
@@ -187,6 +192,19 @@ function Main({route}) {
                   </View>
                 </>
               ),
+            }}
+          />
+          <Stack.Screen
+            name="Account"
+            component={Account}
+            options={{
+              title: 'Account',
+              headerTitleStyle: {
+                color: 'white',
+              },
+              headerStyle: {
+                backgroundColor: '#004d40',
+              },
             }}
           />
         </Stack.Navigator>

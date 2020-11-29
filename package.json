@@ -1,5 +1,5 @@
 {
-  "name": "realtimeChat",
+  "name": "TChat",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,10 +10,13 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.8.9",
     "@react-navigation/stack": "^5.12.6",
     "axios": "^0.21.0",
+    "formik": "^2.2.5",
+    "moment": "^2.29.1",
     "querystring": "^0.2.0",
     "react": "16.13.1",
     "react-native": "0.63.3",
@@ -30,8 +33,10 @@
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0",
     "redux-promise-middleware": "^6.1.2",
-    "socket.io-client": "^3.0.3"
+    "socket.io-client": "^3.0.3",
+    "yup": "^0.31.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

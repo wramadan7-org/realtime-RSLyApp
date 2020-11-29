@@ -3,12 +3,12 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'realtimeChat' do
+target 'TChat' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
 
-  target 'realtimeChatTests' do
+  target 'TChatTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -23,10 +23,10 @@ target 'realtimeChat' do
   end
 end
 
-target 'realtimeChat-tvOS' do
-  # Pods for realtimeChat-tvOS
+target 'TChat-tvOS' do
+  # Pods for TChat-tvOS
 
-  target 'realtimeChat-tvOSTests' do
+  target 'TChat-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

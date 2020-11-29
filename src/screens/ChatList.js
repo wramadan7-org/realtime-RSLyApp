@@ -1,14 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {
-   View, Text, StyleSheet,
-   FlatList, Image, TouchableOpacity,
+   View,
+   Text,
+   StyleSheet,
+   FlatList,
+   Image,
+   TouchableOpacity,
+   RefreshControl,
+
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Logo from '../assets/images/logos/logo.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {APP_URL} from '@env';
+import socket from '../helpers/socket';
+import moment from 'moment';
 
 import chatAction from '../redux/actions/chat';
 import profileAction from '../redux/actions/profile';
@@ -19,7 +27,7 @@ import Header from '../components/Header';
 import img from '../assets/images/default.jpg';
 
 const Item = ({image, receiver, message, status, time, sender, penerima, pengirim, id}) => {
-   console.log('PENGIRIMMMMMM', pengirim.name);
+   // console.log('PENGIRIMMMMMM', pengirim.name);
    const navigation = useNavigation();
    // const profileState = useSelector(state => state.myProfile);
    // const idProfile = profileState.data.id;
@@ -101,11 +109,21 @@ const ChatList = () => {
    const detailChatState = useSelector(state => state.detailChat);
    const {isLoading, isError, data, alertMsg} = listState;
 
+   const [isFetching, setFetching] = useState(false);
+
+   // console.log('profileku', profileState.data.id);
+
    useEffect(() => {
-      dispatch(chatAction.listChat(token));
       dispatch(profileAction.myProfile(token));
-      console.log('liststate',listState);
-   }, [detailChatState]);
+      dispatch(chatAction.listChat(token));
+      console.log('oooooooh', profileState.data.id);
+      console.log('sokkkkkk',socket.on(profileState.data.id, () => {
+         dispatch(chatAction.listChat(token));
+      }));
+      return () => {
+         socket.close();
+      };
+   }, [detailChatState.data]);
 
    const navigation = useNavigation();
 
@@ -116,12 +134,20 @@ const ChatList = () => {
          sender={item.sender}
          message={item.message}
          status={item.status}
-         time={item.time}
+         time={moment(item.createdAt).format('LT')}
          penerima={item.penerima}
          pengirim={item.pengirim}
          id={profileState.data.id}
       />
    );
+
+   const onRefresh = async () => {
+      console.log('refresh');
+      setFetching(true);
+      await dispatch(chatAction.listChat(token));
+      setFetching(false);
+   };
+
    console.log('dataaaaa',data);
 
       return (
@@ -133,8 +159,11 @@ const ChatList = () => {
                   <FlatList
                      data={data}
                      renderItem={renderItem}
-                     keyExtractor={(item, index) => index.toString()}
+                     keyExtractor={(item, index) => item.id.toString()}
                      extraData={data}
+                     refreshControl={
+                        <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+                     }
                      style={styles.flat}
                   />
                ) : (
