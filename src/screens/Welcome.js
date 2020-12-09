@@ -1,63 +1,47 @@
 import React from 'react';
-import {
-  Text, View,
-  TouchableOpacity, StyleSheet, Image,
-} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 //impor logo
 import Logo from '../assets/images/logos/logo.png';
 
 function Welcome({navigation}) {
-
   return (
     <View style={styles.parent}>
-
-      <View style={styles.wrap}>
-
-        <View style={styles.viewHeader}>
-          <Text style={styles.txtHeader}>
-            Selamat datang di TChat
-          </Text>
-        </View>
-
-        <View>
-
-          <View style={styles.viewLogo}>
-            <Image source={Logo} style={styles.logo} />
+      <ScrollView>
+        <View style={styles.wrap}>
+          <View style={styles.viewHeader}>
+            <Text style={styles.txtHeader}>Selamat datang di TChat</Text>
           </View>
 
-          <View style={styles.viewAgreemen}>
-            <Text style={styles.txtAgreemen}>
-              Baca{' '}
-              <Text style={styles.txtLink}>
-                Kebijakan Privasi{' '}
+          <View>
+            <View style={styles.viewLogo}>
+              <Image source={Logo} style={styles.logo} />
+            </View>
+
+            <View style={styles.viewAgreemen}>
+              <Text style={styles.txtAgreemen}>
+                Baca <Text style={styles.txtLink}>Kebijakan Privasi </Text>
+                kami. Ketuk "Setuju dan lanjutkan" untuk menerima{' '}
+                <Text style={styles.txtLink}>Ketentuan Layanan.</Text>
               </Text>
-              kami. Ketuk "Setuju dan lanjutkan" untuk menerima{' '}
-              <Text style={styles.txtLink}>
-                Ketentuan Layanan.
-              </Text>
-            </Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => navigation.navigate('Register')}>
+              <Text style={styles.txtBtn}>SETUJU DAN LANJUTKAN</Text>
+            </TouchableOpacity>
           </View>
-
-          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.txtBtn}>
-                SETUJU DAN LANJUTKAN
-              </Text>
-          </TouchableOpacity>
-
         </View>
-      </View>
 
-      <View style={styles.footer}>
-        <View style={styles.viewFooter}>
-          <Text style={styles.from}>
-            from
-          </Text>
-          <Text style={styles.facebook}>
-            FACEBOOK
-          </Text>
+        <View style={styles.footer}>
+          <View style={styles.viewFooter}>
+            <Text style={styles.from}>from</Text>
+            <Text style={styles.facebook}>FACEBOOK</Text>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -69,9 +53,11 @@ const styles = StyleSheet.create({
   },
   wrap: {
     flex: 1,
+    marginBottom: 20,
   },
   footer: {
-   //  flex: 1,
+    // flex: 1,
+    justifyContent: 'flex-end',
   },
   viewFooter: {
     alignItems: 'center',
@@ -138,7 +124,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
   },
-
 });
 
 export default Welcome;
