@@ -145,14 +145,10 @@ const ChatList = () => {
     const socket = io(APP_URL);
     dispatch(profileAction.myProfile(token));
     dispatch(chatAction.listChat(token));
-    console.log('oooooooh', profileState.data.id);
-    console.log(
-      'sokkkkkk',
-      socket.on(profileState.data.id, ({sender, message}) => {
-        dispatch(chatAction.listChat(token));
-        dispatch(chatAction.chatDetail(token, sender));
-      }),
-    );
+    socket.on(profileState.data.id, ({sender, message}) => {
+      dispatch(chatAction.listChat(token));
+      dispatch(chatAction.chatDetail(token, sender));
+    });
     return () => {
       socket.close();
     };
