@@ -1,14 +1,11 @@
-/* eslint-disable no-undef */
 import React, {useRef, useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   Image,
   ScrollView,
-  Alert,
 } from 'react-native';
 import {APP_URL} from '@env';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -30,7 +27,7 @@ const Profile = ({navigation}) => {
   const updateProfileState = useSelector((state) => state.updateProfile);
 
   const {token} = authState;
-  const {isLoading, isError, data, alertMsg} = profileState;
+  const {isLoading, data} = profileState;
   const dispatch = useDispatch();
   const bottom = useRef();
 
@@ -58,8 +55,6 @@ const Profile = ({navigation}) => {
         // eslint-disable-next-line no-alert
         alert(response.customButton);
       } else {
-        // console.log(response.fileName);
-        // const dataFm = new FormData();
         const source = {
           uri: response.uri,
           type: response.type,
@@ -68,7 +63,6 @@ const Profile = ({navigation}) => {
         setPhoto(source.uri);
         const dataFm = new FormData();
         dataFm.append('profile', source);
-        // console.log(dataFm.append('thumbnail', {url: payload.thumbnail}))
         dispatch(profileAction.updatePhotoProfile(token, dataFm));
       }
     });
@@ -214,7 +208,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   viewPhoto: {
-    // borderWidth: 1,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -228,11 +221,10 @@ const styles = StyleSheet.create({
     height: 200,
   },
   viewBtnPhoto: {
-    // borderWidth: 6,
     position: 'absolute',
     alignSelf: 'flex-end',
     justifyContent: 'flex-end',
-    // marginTop: 20,
+
     width: 50,
     height: 200,
   },
@@ -245,21 +237,17 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     justifyContent: 'center',
     position: 'absolute',
-    // borderWidth: 1,
   },
   choose: {
-    // borderWidth: 1,
     flex: 1,
   },
   btnOpsi: {
-    //  borderWidth: 2,
     flex: 1,
   },
   grupDesc: {
     flexDirection: 'row',
-    //  height: 150,
+
     alignItems: 'center',
-    //  borderWidth: 1,
   },
   txtGrup: {
     flex: 1,
@@ -267,22 +255,18 @@ const styles = StyleSheet.create({
   },
   viewicon: {
     width: 50,
-    // borderWidth: 1,
+
     justifyContent: 'center',
     alignItems: 'center',
   },
   viewOpsi: {
     flexDirection: 'row',
-    // borderWidth: 1,
+
     justifyContent: 'space-between',
     height: 80,
     alignItems: 'center',
-    // borderBottomWidth: 1,
-    // flex: 1,
   },
   titleDesc: {
-    // borderWidth: 1,
-    // flex: 1,
     height: 50,
     justifyContent: 'center',
   },
@@ -294,17 +278,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '900',
     color: 'black',
-    // borderBottomWidth: 0.5,
-    // width: '100%',
   },
-  subtitle: {
-    //  marginVertical: 10,
-    // borderBottomWidth: 0.5,
-  },
+  subtitle: {},
   txtSubtitle: {
     fontSize: 15,
     color: '#424242',
-    // borderBottomWidth: 0.5,
+
     marginBottom: 10,
   },
   contentSheet: {
