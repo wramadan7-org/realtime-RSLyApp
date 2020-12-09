@@ -29,61 +29,53 @@ const HeaderChatDetail = ({friend}) => {
 
   return (
     <>
-      {isLoading && <ModalLoading />}
       <View style={styles.parent}>
-        {!isLoading && !isError && data && (
-          <>
-            <View style={styles.left}>
-              <TouchableOpacity
-                style={styles.btnBack}
-                onPress={() => navigation.navigate('ChatList')}>
-                <Material name="arrow-back" size={25} color="white" />
-                <Image
-                  source={
-                    data.profile === null
-                      ? img
-                      : {uri: `${APP_URL}${data.profile}`}
-                  }
-                  style={styles.photoProfile}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.btnProfile}
-                onPress={() => navigation.navigate('ProfileFriend', friend)}>
-                <Text style={styles.txtName}>
-                  {data.name === null ? data.phone : data.name}
-                </Text>
-              </TouchableOpacity>
-            </View>
+        {/* {!isLoading && !isError && data && (
+          <> */}
+        <View style={styles.left}>
+          <TouchableOpacity
+            style={styles.btnBack}
+            onPress={() => navigation.navigate('ChatList')}>
+            <Material name="arrow-back" size={25} color="white" />
+            <Image
+              source={
+                data.profile === null ? img : {uri: `${APP_URL}${data.profile}`}
+              }
+              style={styles.photoProfile}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btnProfile}
+            onPress={() => navigation.navigate('ProfileFriend', friend)}>
+            <Text style={styles.txtName}>
+              {data.name === null ? data.phone : data.name}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-            <View style={styles.viewIcon}>
-              <TouchableOpacity onPress={() => console.log('OHH')}>
-                <Material
-                  style={styles.icon}
-                  name="videocam"
-                  size={25}
-                  color="white"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Icon
-                  style={styles.icon}
-                  name="phone"
-                  size={25}
-                  color="white"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Icon
-                  style={styles.icon}
-                  name="ellipsis-v"
-                  size={20}
-                  color="white"
-                />
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
+        <View style={styles.viewIcon}>
+          <TouchableOpacity onPress={() => console.log('OHH')}>
+            <Material
+              style={styles.icon}
+              name="videocam"
+              size={25}
+              color="white"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon style={styles.icon} name="phone" size={25} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon
+              style={styles.icon}
+              name="ellipsis-v"
+              size={20}
+              color="white"
+            />
+          </TouchableOpacity>
+        </View>
+        {/* </>
+        )} */}
       </View>
     </>
   );

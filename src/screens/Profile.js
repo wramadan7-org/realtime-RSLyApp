@@ -22,23 +22,21 @@ import defaultProfile from '../assets/images/default.jpg';
 
 // IMPORT SCREEN
 import ChangeName from '../components/ChangeName';
+import ModalLoading from '../components/ModalLoading';
 
 const Profile = ({navigation}) => {
   const profileState = useSelector((state) => state.myProfile);
   const authState = useSelector((state) => state.login);
+  const updateProfileState = useSelector((state) => state.updateProfile);
+
   const {token} = authState;
   const {isLoading, isError, data, alertMsg} = profileState;
-  const updateState = useSelector((state) => state.updateProfile);
-  const {name, profile} = updateState.data;
   const dispatch = useDispatch();
   const bottom = useRef();
 
-  useEffect(() => {
-    //  dispatch(profileAction.myProfile(token));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateState, profileState]);
+  const [photo, setPhoto] = useState(data.photo);
 
-  const chooseImage = () => {
+  function chooseImage() {
     let options = {
       title: 'Select Avatar',
       cameraType: 'front',
@@ -57,149 +55,154 @@ const Profile = ({navigation}) => {
         console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
+        // eslint-disable-next-line no-alert
         alert(response.customButton);
       } else {
         // console.log(response.fileName);
         // const dataFm = new FormData();
-        const dataFm = new FormData();
-        dataFm.append('profile', {
+        const source = {
           uri: response.uri,
-          type: 'image/jpeg',
+          type: response.type,
           name: response.fileName,
-        });
+        };
+        setPhoto(source.uri);
+        const dataFm = new FormData();
+        dataFm.append('profile', source);
         // console.log(dataFm.append('thumbnail', {url: payload.thumbnail}))
         dispatch(profileAction.updatePhotoProfile(token, dataFm));
-        dispatch(profileAction.myProfile(token));
       }
     });
-  };
+  }
+
+  useEffect(() => {
+    if (updateProfileState) {
+      dispatch(profileAction.myProfile(token));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateProfileState]);
 
   return (
     <View style={styles.parent}>
       <ScrollView>
-        {!isLoading && !isError && data && (
-          <>
+        {updateProfileState.isLoading && <ModalLoading />}
+        {isLoading && <ModalLoading />}
+        <TouchableOpacity
+          style={styles.viewPhoto}
+          onPress={() => navigation.navigate('PhotoProfile')}>
+          <Image
+            style={styles.photo}
+            source={
+              photo !== null
+                ? {uri: `${APP_URL}${data.profile}`}
+                : defaultProfile
+            }
+          />
+          <View style={styles.viewBtnPhoto}>
             <TouchableOpacity
-              style={styles.viewPhoto}
-              onPress={() => navigation.navigate('PhotoProfile')}>
-              <Image
-                style={styles.photo}
-                source={
-                  data.profile === null
-                    ? defaultProfile
-                    : {uri: `${APP_URL}${data.profile}`}
-                }
-              />
-              <View style={styles.viewBtnPhoto}>
-                <TouchableOpacity
-                  style={styles.btnChangePhoto}
-                  onPress={chooseImage}>
-                  <Icon name="camera" size={20} color="white" />
-                </TouchableOpacity>
-              </View>
+              style={styles.btnChangePhoto}
+              onPress={chooseImage}>
+              <Icon name="camera" size={20} color="white" />
             </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
 
-            {/* BOTTOM SHEET  */}
-            <RBSheet
-              ref={bottom}
-              closeOnDragDown={true}
-              closeOnPressMask={false}
-              customStyles={{
-                wrapper: {
-                  backgroundColor: 'transparent',
-                },
-                draggableIcon: {
-                  backgroundColor: '#000',
-                },
-              }}>
-              <View style={styles.contentSheet}>
-                <ChangeName
-                  name={data.name}
-                  phone={data.phone}
-                  profile={data.profile}
-                />
+        <View style={styles.choose}>
+          <TouchableOpacity
+            style={styles.btnOpsi}
+            onPress={() => bottom.current.open()}>
+            <View style={styles.grupDesc}>
+              <View style={styles.viewicon}>
+                <Icon name="user" size={30} color="#004d40" />
               </View>
-            </RBSheet>
 
-            <View style={styles.choose}>
-              <TouchableOpacity
-                style={styles.btnOpsi}
-                onPress={() => bottom.current.open()}>
-                <View style={styles.grupDesc}>
-                  <View style={styles.viewicon}>
-                    <Icon name="user" size={30} color="#004d40" />
+              <View style={styles.txtGrup}>
+                <View style={styles.viewOpsi}>
+                  <View style={styles.titleDesc}>
+                    <Text style={styles.title}>Name</Text>
+
+                    <Text style={styles.txtProfile}>{data.name}</Text>
                   </View>
 
-                  <View style={styles.txtGrup}>
-                    <View style={styles.viewOpsi}>
-                      <View style={styles.titleDesc}>
-                        <Text style={styles.title}>Name</Text>
+                  <View style={styles.viewIconDesc}>
+                    <Material name="create" size={25} color="grey" />
+                  </View>
+                </View>
 
-                        <Text style={styles.txtProfile}>{data.name}</Text>
-                      </View>
+                <View style={styles.subtitle}>
+                  <Text style={styles.txtSubtitle}>
+                    Ini bukan nama panegguna atau PIN Anda. Nama ini akan
+                    terlihat oleh kontak RamSLyApp Anda.
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
 
-                      <View style={styles.viewIconDesc}>
-                        <Material name="create" size={25} color="grey" />
-                      </View>
-                    </View>
+          <TouchableOpacity style={styles.btnOpsi}>
+            <View style={styles.grupDesc}>
+              <View style={styles.viewicon}>
+                <Material name="info" size={30} color="#004d40" />
+              </View>
 
-                    <View style={styles.subtitle}>
-                      <Text style={styles.txtSubtitle}>
-                        Ini bukan nama panegguna atau PIN Anda. Nama ini akan
-                        terlihat oleh kontak RamSLyApp Anda.
+              <View style={styles.txtGrup}>
+                <View style={styles.viewOpsi}>
+                  <View style={styles.titleDesc}>
+                    <Text style={styles.title}>Info</Text>
+
+                    <Text style={styles.txtProfile}>TRUST NO ONE</Text>
+                  </View>
+
+                  <View style={styles.viewIconDesc}>
+                    <Material name="create" size={25} color="grey" />
+                  </View>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.btnOpsi}
+            onPress={() => navigation.navigate('InfoChangeNumber')}>
+            <View style={styles.grupDesc}>
+              <View style={styles.viewicon}>
+                <Icon name="phone" size={30} color="#004d40" />
+              </View>
+
+              <View style={styles.txtGrup}>
+                <View style={styles.viewOpsi}>
+                  <View style={styles.titleDesc}>
+                    <Text style={styles.title}>Telepon</Text>
+
+                    <View style={styles.viewPhone}>
+                      <Text style={styles.txtProfile}>+62 {''}</Text>
+                      <Text style={styles.txtProfile}>
+                        {data.phone.slice(1, data.phone.length)}
                       </Text>
                     </View>
                   </View>
                 </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.btnOpsi}>
-                <View style={styles.grupDesc}>
-                  <View style={styles.viewicon}>
-                    <Material name="info" size={30} color="#004d40" />
-                  </View>
-
-                  <View style={styles.txtGrup}>
-                    <View style={styles.viewOpsi}>
-                      <View style={styles.titleDesc}>
-                        <Text style={styles.title}>Info</Text>
-
-                        <Text style={styles.txtProfile}>TRUST NO ONE</Text>
-                      </View>
-
-                      <View style={styles.viewIconDesc}>
-                        <Material name="create" size={25} color="grey" />
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.btnOpsi}>
-                <View style={styles.grupDesc}>
-                  <View style={styles.viewicon}>
-                    <Icon name="phone" size={30} color="#004d40" />
-                  </View>
-
-                  <View style={styles.txtGrup}>
-                    <View style={styles.viewOpsi}>
-                      <View style={styles.titleDesc}>
-                        <Text style={styles.title}>Telepon</Text>
-
-                        <View style={styles.viewPhone}>
-                          <Text style={styles.txtProfile}>+62 {''}</Text>
-                          <Text style={styles.txtProfile}>
-                            {data.phone.slice(1, data.phone.length)}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
+              </View>
             </View>
-          </>
-        )}
+          </TouchableOpacity>
+        </View>
+
+        {/* BOTTOM SHEET  */}
+        <RBSheet
+          ref={bottom}
+          closeOnDragDown={true}
+          closeOnPressMask={true}
+          customStyles={{
+            wrapper: {
+              backgroundColor: 'transparent',
+            },
+            draggableIcon: {
+              backgroundColor: '#000',
+            },
+          }}>
+          <View style={styles.contentSheet}>
+            <ChangeName name={data.name} />
+          </View>
+        </RBSheet>
       </ScrollView>
     </View>
   );
@@ -249,13 +252,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   btnOpsi: {
-    // borderWidth: 2,
-    // height: 100,
+    //  borderWidth: 2,
+    flex: 1,
   },
   grupDesc: {
     flexDirection: 'row',
-    height: 150,
+    //  height: 150,
     alignItems: 'center',
+    //  borderWidth: 1,
   },
   txtGrup: {
     flex: 1,
@@ -294,7 +298,7 @@ const styles = StyleSheet.create({
     // width: '100%',
   },
   subtitle: {
-    marginVertical: 10,
+    //  marginVertical: 10,
     // borderBottomWidth: 0.5,
   },
   txtSubtitle: {

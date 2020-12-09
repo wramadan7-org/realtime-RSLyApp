@@ -17,6 +17,7 @@ import PhotoProfile from './PhotoProfile';
 import PhotoProfileFriend from './PhotoProfileFriend';
 import ChooseFriend from './ChooseFriend';
 import Account from './Account';
+import InfoChangeNumber from './InfoChangeNumber';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SplashScreen from 'react-native-splash-screen';
@@ -204,6 +205,13 @@ function Main({route}) {
               headerStyle: {
                 backgroundColor: '#004d40',
               },
+            }}
+          />
+          <Stack.Screen
+            name="InfoChangeNumber"
+            component={InfoChangeNumber}
+            options={{
+              headerShown: false,
             }}
           />
         </Stack.Navigator>
