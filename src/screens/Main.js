@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
@@ -33,9 +33,8 @@ const Stack = createStackNavigator();
 // };
 
 function Main({route}) {
-
-  const loginState = useSelector(state => state.login);
-  const profileState = useSelector(state => state.myProfile);
+  const loginState = useSelector((state) => state.login);
+  const profileState = useSelector((state) => state.myProfile);
   // console.log('route main', route);
   const {data} = profileState;
   // console.log(loginState);
