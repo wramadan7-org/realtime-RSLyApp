@@ -1,11 +1,23 @@
 import React, {useState} from 'react';
-import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingList from '../screens/SettingList';
+import SearchScreen from '../screens/Search';
 
 import {useNavigation} from '@react-navigation/native';
 
+import searchAction from '../redux/actions/search';
+
 const Header = () => {
+  const dispatch = useDispatch();
+
   const [setting, setSetting] = useState(false);
 
   const navigation = useNavigation();
@@ -19,7 +31,7 @@ const Header = () => {
 
         <View style={styles.viewGroupIcon}>
           <View style={styles.groupIcon}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setBtnSearch(true)}>
               <Icon name="search" size={20} color="white" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Setting')}>

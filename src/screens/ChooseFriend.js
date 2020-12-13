@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,6 +19,8 @@ import listFriendAction from '../redux/actions/profile';
 
 import defaultProfile from '../assets/images/default.jpg';
 import {APP_URL} from '@env';
+// import component
+import HeaderKontak from '../components/HeaderKontak';
 
 const Item = ({id, profile, name, message, phone, info}) => {
   const navigation = useNavigation();
@@ -51,6 +54,7 @@ const Item = ({id, profile, name, message, phone, info}) => {
 
 function ChooseFriend() {
   const friendListState = useSelector((state) => state.listFriend);
+  const searching = useSelector((state) => state.search);
   const {data} = friendListState;
   const dispatch = useDispatch();
 
@@ -71,44 +75,63 @@ function ChooseFriend() {
 
   return (
     <>
+      <HeaderKontak />
       <View style={styles.parent}>
-        <ScrollView>
-          <TouchableOpacity style={styles.btnChoise}>
-            <View style={styles.viewBtnImage}>
-              <View style={styles.backgroundIcon}>
-                <Material name="group" size={20} color="white" />
-              </View>
-            </View>
-
-            <Text style={styles.title}>Group baru</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.btnChoise}>
-            <View style={styles.viewBtnImage}>
-              <View style={styles.backgroundIcon}>
-                <Icon name="user-plus" size={20} color="white" />
-              </View>
-            </View>
-
-            <View style={styles.grupTxtBtn}>
-              <Text style={styles.title}>Kontak baru</Text>
-
-              <TouchableOpacity>
-                <Icon
-                  style={styles.iconCode}
-                  name="qrcode"
-                  size={25}
-                  color="#004d40"
+        <ScrollView style={styles.scroll}>
+          {searching.dataSearch.length ? (
+            <>
+              {searching.success ? (
+                <FlatList
+                  data={searching.dataSearch}
+                  renderItem={renderItem}
+                  keyExtractor={(item, index) => index.toString()}
+                  // extraData={data}
                 />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
+              ) : (
+                Alert.alert('Not found')
+              )}
+            </>
+          ) : (
+            <>
+              <TouchableOpacity style={styles.btnChoise}>
+                <View style={styles.viewBtnImage}>
+                  <View style={styles.backgroundIcon}>
+                    <Material name="group" size={20} color="white" />
+                  </View>
+                </View>
 
-          <FlatList
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-          />
+                <Text style={styles.title}>Group baru</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.btnChoise}>
+                <View style={styles.viewBtnImage}>
+                  <View style={styles.backgroundIcon}>
+                    <Icon name="user-plus" size={20} color="white" />
+                  </View>
+                </View>
+
+                <View style={styles.grupTxtBtn}>
+                  <Text style={styles.title}>Kontak baru</Text>
+
+                  <TouchableOpacity>
+                    <Icon
+                      style={styles.iconCode}
+                      name="qrcode"
+                      size={25}
+                      color="#004d40"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+
+              <FlatList
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => index.toString()}
+                extraData={data}
+              />
+            </>
+          )}
         </ScrollView>
       </View>
     </>
@@ -123,6 +146,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 100,
     // borderWidth: 1,
+  },
+  scroll: {
+    marginBottom: 60,
   },
   viewImage: {
     alignItems: 'center',

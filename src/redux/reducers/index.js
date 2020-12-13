@@ -10,16 +10,18 @@ import profileFriend from './profileFriend';
 import updateProfile from './updateProfile';
 import updatePhotoProfile from './updatePhotoProfile';
 import listFriend from './listFriend';
+import search from './search';
 
 export default combineReducers({
-   register,
-   login,
-   listChat,
-   detailChat,
-   sendChat,
-   myProfile,
-   profileFriend,
-   updateProfile,
-   listFriend,
-   updatePhotoProfile,
+  register,
+  login,
+  listChat,
+  detailChat,
+  sendChat,
+  myProfile,
+  profileFriend,
+  updateProfile,
+  listFriend,
+  updatePhotoProfile,
+  search,
 });

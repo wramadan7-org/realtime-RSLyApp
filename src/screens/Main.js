@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
@@ -42,6 +48,8 @@ function Main({route}) {
   // console.log(loginState);
   const {isLogin, token} = loginState;
   // console.log('loginlgngnggn');
+
+  const [btnSearch, setBtnSearch] = React.useState(false);
 
   React.useEffect(() => {
     SplashScreen.hide();
@@ -167,32 +175,7 @@ function Main({route}) {
             name="ChooseFriend"
             component={ChooseFriend}
             options={{
-              headerStyle: {
-                backgroundColor: '#004d40',
-                height: 70,
-                elevation: 2,
-              },
-              headerTitleStyle: {
-                color: 'white',
-              },
-              headerTitle: () => (
-                <>
-                  <Text style={styles.title}>Pilih kontak</Text>
-                  <Text style={styles.subtitle}>155 kontak</Text>
-                </>
-              ),
-              headerRight: () => (
-                <>
-                  <View style={styles.viewIcon}>
-                    <TouchableOpacity style={styles.btnIcon}>
-                      <Icon name="search" size={20} color="white" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnIcon}>
-                      <Icon name="ellipsis-v" size={20} color="white" />
-                    </TouchableOpacity>
-                  </View>
-                </>
-              ),
+              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -251,6 +234,10 @@ const styles = StyleSheet.create({
     flex: 1,
     // borderWidth: 1,
     alignItems: 'center',
+  },
+  txtInputSearch: {
+    backgroundColor: 'white',
+    flex: 1,
   },
 });
 

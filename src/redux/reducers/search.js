@@ -1,20 +1,20 @@
 const initialState = {
-  isError: false,
+  dataSearch: [],
   isLoading: false,
+  isError: false,
   alertMsg: '',
-  data: [],
   success: false,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'REGISTER_PENDING': {
+    case 'SEARCH_PENDING': {
       return {
         ...state,
         isLoading: true,
       };
     }
-    case 'REGISTER_REJECTED': {
+    case 'SEARCH_REJECTED': {
       return {
         ...state,
         isLoading: false,
@@ -22,14 +22,23 @@ export default (state = initialState, action) => {
         alertMsg: 'Rejected',
       };
     }
-    case 'REGISTER_FULFILLED': {
+    case 'SEARCH_FULFILLED': {
       return {
         ...state,
+        isError: false,
+        alertMsg: action.payload.data.message,
+        dataSearch: action.payload.data.results,
+        success: action.payload.data.success,
+      };
+    }
+    case 'CLEAR_SEARCH': {
+      return {
+        ...state,
+        dataSearch: [],
         isLoading: false,
         isError: false,
-        success: action.payload.data.success,
-        data: action.payload.data.results,
-        alertMsg: action.payload.data.message,
+        alertMsg: '',
+        success: false,
       };
     }
     default: {

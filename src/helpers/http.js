@@ -1,6 +1,6 @@
-import { default as axios } from 'axios';
+import {default as axios} from 'axios';
 
-import { APP_URL } from '@env';
+import {APP_URL} from '@env';
 console.log('url', APP_URL);
 
 const http = (token = null) => {

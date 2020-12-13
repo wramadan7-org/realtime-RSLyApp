@@ -25,6 +25,7 @@ import profileAction from '../redux/actions/profile';
 // import component
 import Header from '../components/Header';
 import ModalLoading from '../components/ModalLoading';
+import SearchScreen from './Search';
 
 import img from '../assets/images/default.jpg';
 
@@ -135,6 +136,7 @@ const ChatList = () => {
   const listState = useSelector((state) => state.listChat);
   const profileState = useSelector((state) => state.myProfile);
   const detailChatState = useSelector((state) => state.detailChat);
+  const search = useSelector((state) => state.search);
   const {isLoading, isError, data, alertMsg} = listState;
 
   const [isFetching, setFetching] = useState(false);
@@ -145,7 +147,7 @@ const ChatList = () => {
     const socket = io(APP_URL);
     dispatch(profileAction.myProfile(token));
     dispatch(chatAction.listChat(token));
-    console.log('oooooooh', profileState.data.id);
+    // console.log('oooooooh', profileState.data.id);
     // console.log(
     //   'sokkkkkk',
     socket.on(profileState.data.id, ({sender, message}) => {
